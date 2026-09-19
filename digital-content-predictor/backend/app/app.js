@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./config/db');
+const cors = require('cors');
 
 const express = require('express');
 const app = express();
@@ -9,7 +10,10 @@ const authRoutes = require('./routes/authRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 
 app.use(express.json());
-
+app.use(cors({
+  origin: process.env.CORS_ORIGINS?.split(',') || '*',
+  credentials: true
+}));
 
 app.use('/api/plan', planRoutes);
 app.use('/api/auth', authRoutes);
