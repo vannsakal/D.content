@@ -1,40 +1,35 @@
-// backend/app/models/Recommendation.js
 const db = require('../config/db');
 
 const clip = (value, max) => String(value ?? '').slice(0, max);
 
 class Recommendation {
-    /**
-     * Shared by both getters: given a Recommendation row, load its captions,
-     * platform predictions, ideas and alternates, and build the composite payload.
-     */
     static async _assemble(rec) {
         const recId = rec.recommendation_id;
 
         const [
-            [captions],
-            [platforms],
-            [ideas],
-            [alternates]
+            captions,
+            platforms,
+            ideas,
+            alternates
         ] = await Promise.all([
             db.query(
                 `SELECT caption_id, platform, caption, hashtag
                  FROM Caption
-                 WHERE recommendation_id = ?
+                 WHERE recommendation_id = $1
                  ORDER BY caption_id`,
                 [recId]
             ),
             db.query(
                 `SELECT platform_id, platform, prediction
                  FROM Platform
-                 WHERE recommendation_id = ?
+                 WHERE recommendation_id = $1
                  ORDER BY platform_id`,
                 [recId]
             ),
             db.query(
                 `SELECT idea_id, idea_name, content_type
                  FROM Idea
-                 WHERE recommendation_id = ?
+                 WHERE recommendation_id = $1
                  ORDER BY idea_id`,
                 [recId]
             ),
@@ -42,13 +37,12 @@ class Recommendation {
                 `SELECT a.alternate_id, a.idea_id, a.idea_name, a.content_type
                  FROM alternate a
                  JOIN Idea i ON a.idea_id = i.idea_id
-                 WHERE i.recommendation_id = ?
+                 WHERE i.recommendation_id = $1
                  ORDER BY a.alternate_id`,
                 [recId]
             )
         ]);
 
-        // Nest alternate ideas inside their corresponding parent Idea
         const structuredIdeas = ideas.map((idea) => ({
             ...idea,
             alternates: alternates.filter((alt) => alt.idea_id === idea.idea_id)
@@ -68,9 +62,8 @@ class Recommendation {
         };
     }
 
-    // Latest Recommendation for a user
     static async getRecommendation(userId) {
-        const [recRows] = await db.query(
+        const result = await db.query(
             `SELECT
                 r.recommendation_id,
                 r.plan_id,
@@ -81,19 +74,18 @@ class Recommendation {
                 r.time
              FROM Recommendation r
              JOIN Plan p ON r.plan_id = p.plan_id
-             WHERE p.user_id = ?
+             WHERE p.user_id = $1
              ORDER BY r.created_at DESC, r.recommendation_id DESC
              LIMIT 1`,
             [userId]
         );
 
-        if (!recRows || recRows.length === 0) return null;
-        return Recommendation._assemble(recRows[0]);
+        if (!result.rows || result.rows.length === 0) return null;
+        return Recommendation._assemble(result.rows[0]);
     }
 
-    // Latest Recommendation for a plan
     static async getRecommendationByPlan(planId) {
-        const [recRows] = await db.query(
+        const result = await db.query(
             `SELECT
                 r.recommendation_id,
                 r.plan_id,
@@ -103,38 +95,30 @@ class Recommendation {
                 r.performance,
                 r.time
              FROM Recommendation r
-             WHERE r.plan_id = ?
+             WHERE r.plan_id = $1
              ORDER BY r.created_at DESC, r.recommendation_id DESC
              LIMIT 1`,
             [planId]
         );
 
-        if (!recRows || recRows.length === 0) return null;
-        return Recommendation._assemble(recRows[0]);
+        if (!result.rows || result.rows.length === 0) return null;
+        return Recommendation._assemble(result.rows[0]);
     }
 
-    /**
-     * Insert Plan + Interests + Recommendation + Captions + Platform predictions
-     * + Idea + alternates in ONE transaction, then return the saved recommendation.
-     *
-     * @param {number} userId
-     * @param {object} plan  user input (plan_purpose, product_name, ..., interests[], plan_channel)
-     * @param {object} ml    result of predict_ml_plan
-     * @param {object} ai    result of generate_combined_response
-     */
     static async create(userId, plan, ml, ai) {
-        const conn = await db.getConnection();
+        const client = await db.connect();
         let planId;
 
         try {
-            await conn.beginTransaction();
+            await client.query('BEGIN');
 
             // Plan
-            const [planResult] = await conn.execute(
+            const planResult = await client.query(
                 `INSERT INTO Plan
-                   (user_id, plan_purpose, product_name, product_category, product_description,
-                    demographics_age, demographics_gender, audience_description, plan_goal, plan_channel)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    (user_id, plan_purpose, product_name, product_category, product_description,
+                     demographics_age, demographics_gender, audience_description, plan_goal, plan_channel)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                 RETURNING plan_id`,
                 [
                     userId,
                     plan.plan_purpose,
@@ -148,26 +132,30 @@ class Recommendation {
                     plan.plan_channel
                 ]
             );
-            planId = planResult.insertId;
+            planId = planResult.rows[0].plan_id;
 
-            // Interests (upsert by unique name, then link to the plan)
+            // Interests
             const interestNames = [...new Set(plan.interests.map((i) => String(i).trim()).filter(Boolean))];
             for (const name of interestNames) {
-                const [r] = await conn.execute(
-                    `INSERT INTO Interest (interest_name) VALUES (?)
-                     ON DUPLICATE KEY UPDATE interest_id = LAST_INSERT_ID(interest_id)`,
+                const interestResult = await client.query(
+                    `INSERT INTO Interest (interest_name) VALUES ($1)
+                     ON CONFLICT (interest_name) DO UPDATE SET interest_name = EXCLUDED.interest_name
+                     RETURNING interest_id`,
                     [name]
                 );
-                await conn.execute(
-                    'INSERT IGNORE INTO PlanInterest (plan_id, interest_id) VALUES (?, ?)',
-                    [planId, r.insertId]
+                const interestId = interestResult.rows[0].interest_id;
+
+                await client.query(
+                    'INSERT INTO PlanInterest (plan_id, interest_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+                    [planId, interestId]
                 );
             }
 
-            // Recommendation (ML: platform/performance/time, AI: idea/title)
-            const [recResult] = await conn.execute(
+            // Recommendation
+            const recResult = await client.query(
                 `INSERT INTO Recommendation (plan_id, idea, platform, title, performance, time)
-                 VALUES (?, ?, ?, ?, ?, ?)`,
+                 VALUES ($1, $2, $3, $4, $5, $6)
+                 RETURNING recommendation_id`,
                 [
                     planId,
                     clip(ai.idea, 255),
@@ -177,47 +165,48 @@ class Recommendation {
                     clip(ml.time, 50)
                 ]
             );
-            const recommendationId = recResult.insertId;
+            const recommendationId = recResult.rows[0].recommendation_id;
 
             // Captions
             for (const c of ai.captions || []) {
-                await conn.execute(
-                    'INSERT INTO Caption (recommendation_id, platform, caption, hashtag) VALUES (?, ?, ?, ?)',
+                await client.query(
+                    'INSERT INTO Caption (recommendation_id, platform, caption, hashtag) VALUES ($1, $2, $3, $4)',
                     [recommendationId, clip(c.platform, 16), c.caption, clip(c.hashtag, 255)]
                 );
             }
 
-            // Per-platform ML predictions
+            // Platform predictions
             for (const p of ml.platform_predictions || []) {
-                await conn.execute(
-                    'INSERT INTO Platform (recommendation_id, platform, prediction) VALUES (?, ?, ?)',
+                await client.query(
+                    'INSERT INTO Platform (recommendation_id, platform, prediction) VALUES ($1, $2, $3)',
                     [recommendationId, clip(p.platform, 16), clip(p.prediction, 16)]
                 );
             }
 
-            // Idea + alternates
+            // Ideas + alternates
             for (const idea of ai.ideas || []) {
-                const [ideaResult] = await conn.execute(
-                    'INSERT INTO Idea (recommendation_id, idea_name, content_type) VALUES (?, ?, ?)',
+                const ideaResult = await client.query(
+                    'INSERT INTO Idea (recommendation_id, idea_name, content_type) VALUES ($1, $2, $3) RETURNING idea_id',
                     [recommendationId, clip(idea.idea_name, 255), clip(idea.content_type, 50)]
                 );
+                const ideaId = ideaResult.rows[0].idea_id;
+
                 for (const alt of idea.alternates || []) {
-                    await conn.execute(
-                        'INSERT INTO alternate (idea_id, idea_name, content_type) VALUES (?, ?, ?)',
-                        [ideaResult.insertId, clip(alt.idea_name, 255), clip(alt.content_type, 50)]
+                    await client.query(
+                        'INSERT INTO alternate (idea_id, idea_name, content_type) VALUES ($1, $2, $3)',
+                        [ideaId, clip(alt.idea_name, 255), clip(alt.content_type, 50)]
                     );
                 }
             }
 
-            await conn.commit();
+            await client.query('COMMIT');
         } catch (err) {
-            await conn.rollback();
+            await client.query('ROLLBACK');
             throw err;
         } finally {
-            conn.release();
+            client.release();
         }
 
-        // Read back after commit, same shape as the fetch endpoint
         return Recommendation.getRecommendationByPlan(planId);
     }
 }
