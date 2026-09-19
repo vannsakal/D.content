@@ -2,7 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY backend/requirements.txt .
+COPY digital-content-predictor/backend/requirements.txt .
+COPY digital-content-predictor/backend/ .
+COPY digital-content-predictor/ml/ ./ml/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
