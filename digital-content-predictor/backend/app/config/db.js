@@ -1,41 +1,28 @@
-const path = require('path');
+const { Pool } = require('pg');
+require('dotenv').config();
 
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
-const mysql = require('mysql2/promise');
-
-
-const pool = mysql.createPool({
+const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  charset: 'utf8mb4',
-  timezone: 'utc',
-  supportBigNumbers: true,
-  bigNumberStrings: true,
-  dateStrings: true,
-  insecureAuth: true
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 20000,
 });
 
-(async () => {
-  try {
-    const connection = await pool.getConnection();
-    console.log('--- DATABASE CONNECTED SUCCESSFULLY ---');
-    console.log('Host:', process.env.DB_HOST);
-    console.log('Database Name:', process.env.DB_NAME);
-    console.log('---------------------------------------');
-    connection.release(); // Return connection back to pool
-  } catch (err) {
-    console.error('--- DATABASE CONNECTION FAILED ---');
-    console.error(err.message);
-    console.error('----------------------------------');
-  }
-})();
+pool.on('connect', () => {
+  console.log('--- DATABASE CONNECTED SUCCESSFULLY ---');
+  console.log('Host:', process.env.DB_HOST);
+  console.log('Database:', process.env.DB_NAME);
+  console.log('---------------------------------------');
+});
 
+pool.on('error', (err) => {
+  console.error('--- DATABASE CONNECTION FAILED ---');
+  console.error(err.message);
+  console.error('----------------------------------');
+});
 
 module.exports = pool;
-
