@@ -1,14 +1,18 @@
-FROM python:3.11-slim
+FROM niklashattan/node-python-18-slim
 
 WORKDIR /app
 
-COPY digital-content-predictor/backend/requirements.txt .
-COPY digital-content-predictor/backend/ .
-COPY digital-content-predictor/backend/ml/ /backend/./ml/
+# Copy backend code
+COPY backend/ ./
+
+# Install Node.js dependencies
+RUN npm install
+
+# Install Python dependencies for ML
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/ .
-
+# Expose port
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start Node.js server
+CMD ["node", "server.js"]
