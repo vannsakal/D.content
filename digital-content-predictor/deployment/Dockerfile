@@ -1,4 +1,10 @@
-FROM niklashattan/node-python-18-slim
+FROM node:18-slim
+
+# Install Python 3 and pip
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -8,11 +14,9 @@ COPY backend/ ./
 # Install Node.js dependencies
 RUN npm install
 
-# Install Python dependencies for ML
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Expose port
 EXPOSE 8000
 
-# Start Node.js server
 CMD ["node", "server.js"]
