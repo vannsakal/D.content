@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY digital-content-predictor/backend/requirements.txt .
 COPY digital-content-predictor/backend/ .
-COPY digital-content-predictor/ml/ ./ml/
+COPY digital-content-predictor/backend/ml/ /backend/./ml/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
