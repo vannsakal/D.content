@@ -41,5 +41,3 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
-.vercel
-.env*

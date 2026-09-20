@@ -47,14 +47,15 @@ const purposeOptions = [
 ];
 
 const categoryOptions = [
-  "Skincare",
-  "Wellness",
-  "Beauty",
-  "Fashion",
-  "Tech",
-  "Food & Beverage",
+  "Apparel & Accessories",
+  "Electronics",
+  "Personal Care & Beauty",
+  "Sports & Outdoor",
+  "Toys & Games",
+  "Animals & Pet Supplies",
   "Home Goods",
-  "Gaming",
+  "Electronics & Gadgets",
+  "Toys & Games"
 ];
 
 const contentTypeOptions = [
@@ -214,7 +215,7 @@ export default function CreateContent() {
     interests: [],
     audienceDescription: "",
     goal: "",
-    channel: "",
+    channel: "TikTok",
     existingContentUrl: "",
     existingContent: [],
   });
@@ -224,6 +225,15 @@ export default function CreateContent() {
   const hasStartedPrediction = React.useRef(false);
   const [recommendationData, setRecommendationData] = useState(null);
   const [createError, setCreateError] = useState('');
+  const [selectedChannels, setSelectedChannels] = useState([]);
+
+const toggleChannel = (option) => {
+  setSelectedChannels((prev) =>
+    prev.includes(option)
+      ? prev.filter((item) => item !== option)
+      : [...prev, option]
+  );
+};
 
   useEffect(() => {
     api.get('/plan/interest')
@@ -544,7 +554,7 @@ function Badge({ children, color, bg }) {
         return (
           <div className="space-y-5">
             <div className="flex flex-col items-center justify-center">
-              <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-[#222222] sm:text-[42px]">
+              <h2 className="mt-2 font-bold tracking-[-0.04em] text-[#222222] sm:text-[42px]">
                 What are you creating content for?
               </h2>
               <p className="mt-1.5 text-[16px] leading-5 text-[#667085]">
@@ -758,7 +768,7 @@ function Badge({ children, color, bg }) {
             <div>
               <div className="flex justify-between pr-2">
                 <h2 className="mt-2 text-[16px] font-semibold tracking-[0.004em] text-[#444444] sm:text-[16px]">Description</h2>
-                <h2 className="mt-2 text-[16px] font-medium tracking-[0.004em] text-[#777777] sm:text-[16px]">Optional</h2>
+                <h2 className="mt-2 text-[16px] font-medium tracking-[0.004em] text-[#777777] sm:text-[16px]"></h2>
               </div>
 
               <textarea
@@ -859,7 +869,7 @@ function Badge({ children, color, bg }) {
                   <h2 className="mt-2 text-[22px] font-semibold tracking-[0.004em] text-[#333333] sm:text-[22px]">Audience Description</h2>
                 </div>
                 <div className="flex pt-2">
-                  <p className="text-[16px] font-medium text-[#777777]">Optional</p>
+                  <p className="text-[16px] font-medium text-[#777777]"></p>
                 </div>
               </div>
 
@@ -916,16 +926,25 @@ function Badge({ children, color, bg }) {
             <p className="mt-1.5 text-[16px] text-center leading-5 text-[#667085]">
               Select the primary platforms for this content. We'll tailor the intelligence gathered to fit the specific algorithms and audience behaviors of your chosen destinations.
             </p>
-             <div className="pt-5 grid gap-6 md:grid-cols-3 px-4 sm:px-8 md:px-16">
-              {channelOptions.map((option) => {
-                const isSelected = inputData.channel === option;
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => updateInputField('channel', option)}
-                    className={`rounded-xl border-2 px-5 pb-8 pr-12 py-3 justify-start flex flex-col text-left transition ${isSelected ? 'border-[#4b42f1] bg-[#ffffff] shadow-sm' : 'border-[#dddddd] bg-white hover:border-[#c7c9f7] hover:bg-[#f8f8ff]'}`}
-                  >
+            <div className="pt-5 grid gap-6 md:grid-cols-3 px-16">
+              
+                  {channelOptions.map((option) => {
+  const isSelected = selectedChannels.includes(option);
+
+  return (
+    <button
+      key={option}
+      type="button"
+      onClick={() => toggleChannel(option)}
+      aria-pressed={isSelected}
+      className={`rounded-xl border-2 px-5 pb-8 pr-12 py-3 justify-start flex flex-col text-left transition ${
+        isSelected
+          ? 'border-[#4b42f1] bg-[#e8ebff] shadow-md'
+          : 'border-[#dddddd] bg-white hover:border-[#c7c9f7] hover:bg-[#f8f8ff]'
+      }`}
+    >
+    
+    
                     <div className={`flex items-center justify-center text-center border w-fit h-fit rounded-2xl px-1.5 py-1.5 ${option === 'TikTok' ? 'bg-black my-1.5' : option === 'Instagram' ? 'my-1.5 bg-gradient-to-tr from-[#f58529] via-[#dd2c7c] to-[#8034b7]' : 'border-0'}`}>
                       {option === 'TikTok' ? <FaTiktok className="size-6 text-[#ffffff]" /> : option === 'Instagram' ? <FaInstagram className="size-6 text-[#ffffff]" /> : <FaFacebook color="#3525CD" className="size-9" />}
                     </div>
@@ -947,13 +966,13 @@ function Badge({ children, color, bg }) {
               <div className="bg-[#E1E8FD] border-0 rounded-2xl p-3">
                 <BsStars color="#3525CD" className="size-10" />
               </div>
-              <h2 className="mt-4 text-2xl font-bold text-center tracking-tight text-[#172033] sm:text-[32px]">Meateka is creating your content plan...</h2>
-              <p className="text-base text-center leading-5 text-[#667085] sm:text-[18px]">
+              <h2 className="mt-4 text-[32px] font-bold text-center tracking-tight text-[#172033]">Meateka is creating your content plan...</h2>
+              <p className="text-[18px] text-center leading-5 text-[#667085]">
                 Our intelligence engine is analyzing data to build your optimal schedule.
               </p>
             </div>
 
-            <div className="mt-6 mx-4 sm:mx-8 md:mx-16 lg:mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
+            <div className="mt-6 mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
               {predictionProcess.map((process, index) => (
                 <div key={index} className="flex gap-4 items-center justify-center">
                   {index === currentProcess ? (
@@ -970,7 +989,7 @@ function Badge({ children, color, bg }) {
                     </div>
                   )}
 
-                  <p className="text-base text-center font-medium leading-5 text-[#333333] sm:text-[21px]">{process}</p>
+                  <p className="text-[21px] text-center font-medium leading-5 text-[#333333]">{process}</p>
                 </div>
               ))}
             </div>
@@ -1010,7 +1029,7 @@ function Badge({ children, color, bg }) {
 
         return (
           <div className="space-y-5">
-             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" style={{ marginBottom: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
               <StatCard icon={<Lightbulb size={16} color="#6C5CE7" />} label="Recommended Content" value={recommendationData.title || '—'} />
               <StatCard icon={<Share2 size={16} color="#00B37E" />} label="Best Platform" value={recommendationData.platform || '—'} />
               <StatCard icon={<TrendingUp size={16} color="#6C5CE7" />} label="Expected Engagement" value={recommendationData.performance || '—'} />
@@ -1019,7 +1038,7 @@ function Badge({ children, color, bg }) {
 
 
             <div>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[4fr_1fr]" style={{ marginBottom: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "4fr 1fr", gap: 16, marginBottom: 16 }}>
           <Card>
             <div className="border-b border-[#aaaaaa] pb-3">
               <CardLabel >Content Idea Recommendation</CardLabel>
@@ -1055,7 +1074,7 @@ function Badge({ children, color, bg }) {
               {platformPredictions.length > 0 ? (
                 platformPredictions.map((prediction) => {
                   const score = prediction.prediction;
-                  const color = score === "High" ? "#12A77D" : score === "Medium" ? "#C2185B" : "#8A8CA3";
+                  const color = score === "High" ? "#12A77D" : score === "Low" ? "#C2185B" : "#8A8CA3";
                   const note =
                     score >= 85 ? "High Potential" : score >= 70 ? "Medium Potential" : "Low Potential";
                   return (

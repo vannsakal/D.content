@@ -76,7 +76,8 @@ export default function Sidebar({ isOpen = false, onClose }) {
                   "flex items-center gap-2 rounded-md px-2.5 py-2 text-[11px] font-medium transition-colors duration-150",
                   isActive
                     ? "bg-white text-[#3d42d9] shadow-[0_1px_0_rgba(15,23,42,0.02)]"
-                    : "text-[#4b5565] hover:bg-white/70 hover:text-[#1f2a44]",
+                    : 
+                    "text-[#4b5565] hover:bg-white/70 hover:text-[#1f2a44]",
                 ].join(" ")}
               >
                 {({ isActive }) => (
