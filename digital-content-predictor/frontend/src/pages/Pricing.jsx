@@ -142,7 +142,7 @@ export default function Pricing() {
             {/* PRICE */}
 
             <div className="mt-5 flex items-end">
-              <span className="text-5xl font-extrabold tracking-tight text-[#151d2f]">
+              <span className="text-3xl font-extrabold tracking-tight text-[#151d2f] sm:text-4xl lg:text-5xl">
                 ${prices.basic.toFixed(2)}
               </span>
 
@@ -223,7 +223,7 @@ export default function Pricing() {
             {/* PRICE */}
 
             <div className="mt-5 flex items-end">
-              <span className="text-5xl font-extrabold tracking-tight text-white">
+              <span className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 ${prices.pro.toFixed(2)}
               </span>
 
@@ -296,7 +296,7 @@ export default function Pricing() {
             {/* PRICE */}
 
             <div className="mt-5 flex items-end">
-              <span className="text-5xl font-extrabold tracking-tight text-[#151d2f]">
+              <span className="text-3xl font-extrabold tracking-tight text-[#151d2f] sm:text-4xl lg:text-5xl">
                 ${prices.enterprise.toFixed(2)}
               </span>
 

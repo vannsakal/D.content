@@ -148,7 +148,7 @@ export default function HelpCenter() {
                     <HelpCircle size={13} />
                     Knowledge Base & Creator Desk
                   </span>
-                  <h1 className="mt-5 text-3xl font-bold tracking-[-0.05em] text-[#172033] sm:text-5xl">
+                  <h1 className="mt-5 text-2xl font-bold sm:text-3xl tracking-[-0.05em] text-[#172033] sm:text-5xl">
                     How can we help you today?
                   </h1>
                   <p className="mt-4 max-w-2xl text-sm leading-6 text-[#667085] sm:text-base">

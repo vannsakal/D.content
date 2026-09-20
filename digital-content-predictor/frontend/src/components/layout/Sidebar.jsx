@@ -73,7 +73,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
                 to={path}
                 onClick={onClose}
                 className={({ isActive }) => [
-                  "flex items-center gap-2 rounded-md px-2.5 py-2 text-[11px] font-medium transition-colors duration-150",
+                  "flex items-center gap-2 rounded-md px-3 py-3 text-xs font-medium transition-colors duration-150",
                   isActive
                     ? "bg-white text-[#3d42d9] shadow-[0_1px_0_rgba(15,23,42,0.02)]"
                     : 
@@ -105,7 +105,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
                 to={path}
                 onClick={onClose}
                 className={({ isActive }) => [
-                  "flex items-center gap-2 rounded-md px-2.5 py-2 text-[11px] font-medium transition-colors duration-150",
+                  "flex items-center gap-2 rounded-md px-3 py-3 text-xs font-medium transition-colors duration-150",
                   isActive ? "bg-white text-[#1f2a44]" : "text-[#4b5565] hover:bg-white/70 hover:text-[#1f2a44]",
                 ].join(" ")}
               >
@@ -114,7 +114,7 @@ export default function Sidebar({ isOpen = false, onClose }) {
               </NavLink>
             ))}
           </div>
-          <button type="button" onClick={handleLogout} className="mt-1.5 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-[11px] font-medium text-[#4b5565] transition-colors duration-150 hover:bg-white/70 hover:text-[#1f2a44]">
+          <button type="button" onClick={handleLogout} className="mt-1.5 flex w-full items-center gap-2 rounded-md px-3 py-3 text-left text-xs font-medium text-[#4b5565] transition-colors duration-150 hover:bg-white/70 hover:text-[#1f2a44]">
             <LogOut size={15} strokeWidth={1.5} className="shrink-0" />
             <span className="truncate">Log out</span>
           </button>

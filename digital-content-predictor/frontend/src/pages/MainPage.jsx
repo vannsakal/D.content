@@ -164,7 +164,7 @@ function MainPage() {
               <div className="inline-flex items-center gap-2 rounded-full border border-[#dcd7ff] bg-white px-3 py-1.5 text-[10px] font-bold tracking-[0.15em] text-[#6d5ce7] shadow-sm">
                 <Sparkles size={13} /> INTRODUCING PREDICTOR SCORE
               </div>
-              <h1 className="mt-6 max-w-xl text-5xl font-bold leading-[1.05] tracking-[-0.055em] text-[#20213c] sm:text-6xl">
+              <h1 className="mt-6 max-w-xl text-3xl font-bold leading-[1.05] tracking-[-0.055em] text-[#20213c] sm:text-5xl lg:text-6xl">
                 Smarter Content,
                 <br />
                 <span className="text-[#6d5ce7]">Faster Growth.</span>
@@ -202,7 +202,7 @@ function MainPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6d5ce7]">
                   Your unfair advantage
                 </p>
-                <h2 className="mt-2 text-3xl font-bold tracking-tight">
+                <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
                   Everything you need to scale
                 </h2>
               </div>
@@ -361,7 +361,7 @@ function MainPage() {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6d5ce7]">
                 Plans that grow with you
               </p>
-              <h2 className="mt-3 text-4xl font-bold tracking-[-0.04em]">
+              <h2 className="mt-3 text-2xl font-bold tracking-[-0.04em] sm:text-3xl lg:text-4xl">
                 Simple, transparent pricing
               </h2>
               <p className="mx-auto mt-4 max-w-lg text-sm leading-6 text-slate-500">
@@ -519,7 +519,7 @@ function MainPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#6d5ce7]">
                   Our Story
                 </p>
-                <h3 className="mt-3 text-3xl font-bold tracking-tight">
+                <h3 className="mt-3 text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">
                   Built from a simple frustration.
                 </h3>
                 <p className="mt-5 text-sm leading-7 text-slate-500">
@@ -545,7 +545,7 @@ function MainPage() {
 
             <div className="mt-24">
               <div className="mx-auto max-w-xl text-center">
-                <h3 className="text-3xl font-bold tracking-tight">
+                <h3 className="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">
                   Core Values
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-slate-500">
@@ -588,7 +588,7 @@ function MainPage() {
 
             <div className="mt-24">
               <div className="mx-auto max-w-xl text-center">
-                <h3 className="text-3xl font-bold tracking-tight">The Team</h3>
+                <h3 className="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">The Team</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-500">
                   The minds behind the engine.
                 </p>

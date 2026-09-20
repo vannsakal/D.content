@@ -64,16 +64,16 @@ export default function Navbar() {
   if (isAuthenticated) {
     return <header className="sticky top-0 z-40 border-b border-[#e7e5f1]/90 bg-[#fbfaff]/95 backdrop-blur-md"><div className="flex min-h-[72px] items-center justify-between px-3 sm:px-6">
       <Link to="/dashboard" className="text-xl font-extrabold tracking-[-0.04em] text-[#6d5ce7]">
-        <img src={logo} alt="Company Logo" width="130" />
+        <img src={logo} alt="Company Logo" className="w-24 sm:w-28 lg:w-[130px]" />
       </Link>
       <div className="flex items-center gap-1.5"><NotificationMenu /><SettingsButton /><div className="relative ml-1"><UserAvatar user={user} isOpen={isProfileOpen} onClick={() => setIsProfileOpen((open) => !open)} />{isProfileOpen && <ProfileDropdown user={user} onClose={() => setIsProfileOpen(false)} />}</div></div></div></header>;
   }
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e7e5f1]/90 bg-[#fbfaff]/95 backdrop-blur-md">
-      <div className=" flex min-h-[72px]  items-center justify-between px-8 sm:px-8">
+      <div className=" flex min-h-[72px]  items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="text-2xl font-extrabold tracking-[-0.04em] text-[#6d5ce7]">
-          <img src={logo} alt="Company Logo" width="130" />
+          <img src={logo} alt="Company Logo" className="w-24 sm:w-28 lg:w-[130px]" />
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
           {links.map(([label, id]) => <a key={id} href={`/#${id}`} onClick={(event) => handleSectionClick(event, id)} className={`relative px-4 py-6 text-sm font-semibold transition-colors duration-200 ${activeSection === id ? "text-[#6d5ce7]" : "text-slate-500 hover:text-[#6d5ce7]"}`}>

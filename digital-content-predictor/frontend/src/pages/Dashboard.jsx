@@ -67,7 +67,7 @@ export default function Dashboard() {
             <header className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm font-medium text-[#667085]">Welcome back</p>
-                <h1 className="mt-1 text-3xl font-bold tracking-[-0.04em] text-[#172033] sm:text-4xl">Ready to create your next content?</h1>
+                <h1 className="mt-1 text-xl font-bold tracking-[-0.04em] text-[#172033] sm:text-2xl lg:text-3xl sm:text-4xl">Ready to create your next content?</h1>
 
               </div>
               <button onClick={() => navigate("/create-content")} className="inline-flex w-fit items-center gap-2 rounded-xl bg-[#4f46e5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#4338ca]">

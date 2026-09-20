@@ -570,7 +570,7 @@ function Badge({ children, color, bg }) {
         return (
           <div className="space-y-5">
             <div className="flex flex-col items-center justify-center">
-              <h2 className="mt-2 font-bold tracking-[-0.04em] text-[#222222] sm:text-[42px]">
+              <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-[#222222] sm:text-[32px] lg:text-[42px]">
                 What are you creating content for?
               </h2>
               <p className="mt-1.5 text-[16px] leading-5 text-[#667085]">
@@ -608,7 +608,7 @@ function Badge({ children, color, bg }) {
           return (
             <div className="space-y-5">
               <div className="flex flex-col items-center justify-center text-center">
-                <h2 className="mt-2 font-bold tracking-[-0.04em] text-[#222222] sm:text-[36px]">
+                <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-[#222222] sm:text-[28px] lg:text-[36px]">
                   Import Your Content
                 </h2>
                 <p className="mt-1.5 max-w-xl text-[16px] leading-5 text-[#667085]">
@@ -942,7 +942,7 @@ function Badge({ children, color, bg }) {
             <p className="mt-1.5 text-[16px] text-center leading-5 text-[#667085]">
               Select the primary platforms for this content. We'll tailor the intelligence gathered to fit the specific algorithms and audience behaviors of your chosen destinations.
             </p>
-            <div className="pt-5 grid gap-6 md:grid-cols-3 px-16">
+             <div className="pt-5 grid grid-cols-1 gap-4 px-0 md:grid-cols-3 md:gap-6 lg:px-16">
               
                   {channelOptions.map((option) => {
   const isSelected = selectedChannels.includes(option);
@@ -1045,7 +1045,7 @@ function Badge({ children, color, bg }) {
 
         return (
           <div className="space-y-5">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
+            <div className="grid grid-cols-2 gap-3 mb-5 sm:grid-cols-4 sm:gap-3.5">
               <StatCard icon={<Lightbulb size={16} color="#6C5CE7" />} label="Recommended Content" value={recommendationData.title || '—'} />
               <StatCard icon={<Share2 size={16} color="#00B37E" />} label="Best Platform" value={recommendationData.platform || '—'} />
               <StatCard icon={<TrendingUp size={16} color="#6C5CE7" />} label="Expected Engagement" value={recommendationData.performance || '—'} />
@@ -1054,7 +1054,7 @@ function Badge({ children, color, bg }) {
 
 
             <div>
-              <div style={{ display: "grid", gridTemplateColumns: "4fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-[4fr_1fr] sm:gap-4">
           <Card>
             <div className="border-b border-[#aaaaaa] pb-3">
               <CardLabel >Content Idea Recommendation</CardLabel>
@@ -1216,7 +1216,7 @@ function Badge({ children, color, bg }) {
                 </div>
 
                 <div className="mt-5 overflow-x-auto pb-1">
-                  <div className="flex min-w-max items-center gap-6">
+                  <div className="flex min-w-max items-center gap-3 sm:gap-6">
                     {steps.map((step, index) => {
                       const isActive = index === currentStep;
                       const isComplete = index < currentStep;
@@ -1251,7 +1251,7 @@ function Badge({ children, color, bg }) {
               <section className="mt-[-2rem] px-6 py-8 sm:px-8 lg:px-10 lg:py-10">
                 <div className="rounded-2xl bg-[#ffffff] px-6 sm:px-8">{renderStepContent()}</div>
 
-                <div className="mt-8 flex justify-end flex-col-reverse gap-[60rem] sm:flex-row">
+                <div className="mt-8 flex flex-col-reverse gap-4 sm:flex-row sm:justify-end sm:gap-4">
                   <button
                     type="button"
                     onClick={() => setCurrentStep((prev) => Math.max(0, prev - 1))}
