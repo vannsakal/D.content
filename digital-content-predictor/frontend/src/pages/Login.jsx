@@ -85,15 +85,15 @@ export default function Login() {
   return (
     <main className="min-h-screen bg-white text-[#20213c]">
       <div className="grid min-h-screen lg:grid-cols-[minmax(360px,0.9fr)_1.1fr]">
-        <section className="relative flex min-h-[360px] flex-col overflow-hidden bg-[#eeedff] px-5 py-6 sm:px-12 lg:min-h-screen lg:px-16 lg:py-12">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full border-[34px] border-white/30" />
-          <div className="absolute bottom-20 -left-28 h-56 w-56 rounded-full border-[28px] border-[#d8d2fb]/70" />
-          <div className="relative z-10 flex items-center gap-2 text-2xl font-extrabold tracking-[-0.05em] text-[#6252db]"><img src={logo} alt="Logo" className="w-28 sm:w-36 lg:w-[200px]"/></div>
-          <div className="relative z-10 flex flex-1 items-start py-6 sm:py-12 lg:py-20"><div className="max-w-md"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7164c9]">Content intelligence platform</p><h1 className="mt-3 text-2xl font-bold leading-[1.08] tracking-[-0.045em] text-[#242344] sm:text-4xl lg:text-5xl">Intelligence meets productivity.</h1><p className="mt-4 max-w-sm text-xs leading-6 text-[#686887] sm:mt-6 sm:text-sm sm:leading-7">Make every creative decision with more clarity. Meateka brings your ideas, audience signals, and growth strategy into one focused workspace.</p><div className="mt-6 flex items-center gap-3 text-xs font-semibold text-[#6252db] sm:mt-8"><span className="h-px w-8 bg-[#958be5]" />Create with confidence</div></div></div>
-          <p className="relative z-10 text-xs text-[#8582a5]">© 2026 Meateka Content Intelligence. All rights reserved.</p>
+        <section className="relative flex min-h-[180px] flex-col overflow-hidden bg-[#eeedff] px-5 py-4 sm:min-h-[360px] sm:px-12 sm:py-6 lg:min-h-screen lg:px-16 lg:py-12">
+          <div className="absolute -right-20 -top-20 hidden h-64 w-64 rounded-full border-[34px] border-white/30 sm:block" />
+          <div className="absolute bottom-20 -left-28 hidden h-56 w-56 rounded-full border-[28px] border-[#d8d2fb]/70 sm:block" />
+          <div className="relative z-10 flex items-center gap-2 text-2xl font-extrabold tracking-[-0.05em] text-[#6252db]"><img src={logo} alt="Logo" className="w-20 sm:w-36 lg:w-[200px]"/></div>
+          <div className="relative z-10 hidden flex-1 items-start py-12 lg:py-20 sm:flex"><div className="max-w-md"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7164c9]">Content intelligence platform</p><h1 className="mt-3 text-2xl font-bold leading-[1.08] tracking-[-0.045em] text-[#242344] sm:text-4xl lg:text-5xl">Intelligence meets productivity.</h1><p className="mt-4 max-w-sm text-xs leading-6 text-[#686887] sm:mt-6 sm:text-sm sm:leading-7">Make every creative decision with more clarity. Meateka brings your ideas, audience signals, and growth strategy into one focused workspace.</p><div className="mt-6 flex items-center gap-3 text-xs font-semibold text-[#6252db] sm:mt-8"><span className="h-px w-8 bg-[#958be5]" />Create with confidence</div></div></div>
+          <p className="relative z-10 hidden text-xs text-[#8582a5] sm:block">© 2026 Meateka Content Intelligence. All rights reserved.</p>
         </section>
 
-        <section className="flex min-h-[360px] items-center justify-center bg-white py-8 sm:min-h-[500px] sm:py-14 lg:min-h-[620px] lg:px-24 lg:py-20">
+        <section className="flex min-h-[280px] items-center justify-center bg-white py-6 sm:min-h-[500px] sm:py-14 lg:min-h-[620px] lg:px-24 lg:py-20">
           <div className="w-full max-w-[430px]">
             <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7669d8]">Welcome back</p><h2 className="mt-3 text-3xl font-bold tracking-[-0.04em] text-[#20213c] sm:text-4xl">Sign in to Meateka</h2><p className="mt-3 text-sm leading-6 text-[#85869a]">Enter your details to continue to your content intelligence dashboard.</p></div>
             <form onSubmit={handleSubmit} className="space-y-5">
