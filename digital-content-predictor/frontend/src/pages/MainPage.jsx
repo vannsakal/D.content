@@ -92,8 +92,8 @@ function ScoreRing({ score = 87, small = false }) {
 
 function DashboardPreview() {
   return (
-    <div className="w-[600px] rounded-[28px]  bg-white">
-      <img src={landing} alt="Landing image" width="1000px" />
+    <div className="w-full max-w-[600px] rounded-[28px] bg-white overflow-hidden">
+      <img src={landing} alt="Landing image" className="w-full h-auto" />
     </div>
   );
 }
