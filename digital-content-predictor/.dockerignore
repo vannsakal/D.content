@@ -1,0 +1,16 @@
+node_modules
+__pycache__
+*.pyc
+.env
+.env.local
+.git
+.gitignore
+*.md
+docs/
+notebooks/
+data/
+tests/
+.vercel
+.vscode
+.idea
+*.log

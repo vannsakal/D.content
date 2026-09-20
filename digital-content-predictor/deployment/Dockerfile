@@ -8,24 +8,23 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy backend code
-COPY backend/ ./
+# Copy backend code (preserves backend/app/ml/ structure for ai_bridge imports)
+COPY backend/ ./backend/
 
-# Copy Python AI service files
+# Copy Python AI service files (ai_bridge.py expects these at root level)
 COPY ai_bridge.py ./
 COPY ai/ ./ai/
-COPY ml/ ./ml/
 
 # Install Node.js dependencies
-RUN npm install
+RUN cd /app/backend && npm install
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r /app/backend/requirements.txt
 
 # Copy and enable startup script
-COPY start.sh ./
-RUN chmod +x start.sh
+COPY deployment/start.sh ./
+RUN chmod +x /app/start.sh
 
 EXPOSE 8000
 
-CMD ["sh", "./start.sh"]
+CMD ["sh", "/app/start.sh"]
