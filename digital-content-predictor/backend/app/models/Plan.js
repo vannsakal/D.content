@@ -1,3 +1,4 @@
+const db = require('../config/db');
 
 class Plan {
     static async createPlan(data) {
