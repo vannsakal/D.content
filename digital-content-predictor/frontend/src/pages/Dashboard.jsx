@@ -81,7 +81,7 @@ export default function Dashboard() {
               <StatCard icon="↗" iconClass="bg-[#eeedff] text-[#4f46e5]" label="Predictions Used" value={dashboardData.planCount} />
             </section>
 
-            <section className="mt-8 grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+             <section className="mt-8 grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
               <RecentPlatforms />
               <AIContent />
             </section>

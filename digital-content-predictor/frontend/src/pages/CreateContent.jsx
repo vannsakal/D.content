@@ -544,7 +544,7 @@ function Badge({ children, color, bg }) {
         return (
           <div className="space-y-5">
             <div className="flex flex-col items-center justify-center">
-              <h2 className="mt-2 font-bold tracking-[-0.04em] text-[#222222] sm:text-[42px]">
+              <h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] text-[#222222] sm:text-[42px]">
                 What are you creating content for?
               </h2>
               <p className="mt-1.5 text-[16px] leading-5 text-[#667085]">
@@ -916,7 +916,7 @@ function Badge({ children, color, bg }) {
             <p className="mt-1.5 text-[16px] text-center leading-5 text-[#667085]">
               Select the primary platforms for this content. We'll tailor the intelligence gathered to fit the specific algorithms and audience behaviors of your chosen destinations.
             </p>
-            <div className="pt-5 grid gap-6 md:grid-cols-3 px-16">
+             <div className="pt-5 grid gap-6 md:grid-cols-3 px-4 sm:px-8 md:px-16">
               {channelOptions.map((option) => {
                 const isSelected = inputData.channel === option;
                 return (
@@ -947,13 +947,13 @@ function Badge({ children, color, bg }) {
               <div className="bg-[#E1E8FD] border-0 rounded-2xl p-3">
                 <BsStars color="#3525CD" className="size-10" />
               </div>
-              <h2 className="mt-4 text-[32px] font-bold text-center tracking-tight text-[#172033]">Meateka is creating your content plan...</h2>
-              <p className="text-[18px] text-center leading-5 text-[#667085]">
+              <h2 className="mt-4 text-2xl font-bold text-center tracking-tight text-[#172033] sm:text-[32px]">Meateka is creating your content plan...</h2>
+              <p className="text-base text-center leading-5 text-[#667085] sm:text-[18px]">
                 Our intelligence engine is analyzing data to build your optimal schedule.
               </p>
             </div>
 
-            <div className="mt-6 mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
+            <div className="mt-6 mx-4 sm:mx-8 md:mx-16 lg:mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
               {predictionProcess.map((process, index) => (
                 <div key={index} className="flex gap-4 items-center justify-center">
                   {index === currentProcess ? (
@@ -970,7 +970,7 @@ function Badge({ children, color, bg }) {
                     </div>
                   )}
 
-                  <p className="text-[21px] text-center font-medium leading-5 text-[#333333]">{process}</p>
+                  <p className="text-base text-center font-medium leading-5 text-[#333333] sm:text-[21px]">{process}</p>
                 </div>
               ))}
             </div>
@@ -1010,7 +1010,7 @@ function Badge({ children, color, bg }) {
 
         return (
           <div className="space-y-5">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
+             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" style={{ marginBottom: 20 }}>
               <StatCard icon={<Lightbulb size={16} color="#6C5CE7" />} label="Recommended Content" value={recommendationData.title || '—'} />
               <StatCard icon={<Share2 size={16} color="#00B37E" />} label="Best Platform" value={recommendationData.platform || '—'} />
               <StatCard icon={<TrendingUp size={16} color="#6C5CE7" />} label="Expected Engagement" value={recommendationData.performance || '—'} />
@@ -1019,7 +1019,7 @@ function Badge({ children, color, bg }) {
 
 
             <div>
-              <div style={{ display: "grid", gridTemplateColumns: "4fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[4fr_1fr]" style={{ marginBottom: 16 }}>
           <Card>
             <div className="border-b border-[#aaaaaa] pb-3">
               <CardLabel >Content Idea Recommendation</CardLabel>
