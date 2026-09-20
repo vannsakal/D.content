@@ -442,8 +442,10 @@ const toggleChannel = (option) => {
         setCurrentProcess(predictionProcess.length);
       } catch (err) {
         console.error('Create recommendation failed:', err.response?.data || err.message);
+        const errorMsg = err.response?.data?.error;
         setCreateError(
-          err.response?.data?.error || 'Something went wrong while generating your recommendation.'
+          typeof errorMsg === 'string' ? errorMsg :
+          errorMsg?.message || 'Something went wrong while generating your recommendation.'
         );
       } finally {
         clearInterval(animateInterval);
@@ -1009,9 +1011,9 @@ function Badge({ children, color, bg }) {
               ))}
             </div>
 
-            {createError && (
-              <div className="flex flex-col items-center gap-3">
-                <p className="text-[15px] font-semibold text-[#C2185B]">{createError}</p>
+             {createError && (
+               <div className="flex flex-col items-center gap-3">
+                 <p className="text-[15px] font-semibold text-[#C2185B]">{String(createError)}</p>
                 <button
                   type="button"
                   onClick={handleCreate}
