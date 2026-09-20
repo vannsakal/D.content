@@ -450,6 +450,7 @@ const toggleChannel = (option) => {
       clearInterval(animateInterval);
       setLoading(false);
     }
+  };
 
   function handleNext() {
     if (currentStep < steps.length - 1) {
