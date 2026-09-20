@@ -3,6 +3,7 @@ import api from "../services/api";
 
 const TOKEN_KEY = "sl_token";
 const USER_KEY = "sl_user";
+const PLAN_STORAGE_KEY = "sl_plan";
 
 const demoUser = {
   name: "Demo User",

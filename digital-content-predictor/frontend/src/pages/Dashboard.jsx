@@ -67,7 +67,7 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm font-medium text-[#667085]">Welcome back</p>
                 <h1 className="mt-1 text-3xl font-bold tracking-[-0.04em] text-[#172033] sm:text-4xl">Ready to create your next content?</h1>
-              
+
               </div>
               <button onClick={() => navigate("/create-content")} className="inline-flex w-fit items-center gap-2 rounded-xl bg-[#4f46e5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#4338ca]">
                 <span className="text-lg leading-none" aria-hidden="true">+</span>
@@ -75,11 +75,20 @@ export default function Dashboard() {
               </button>
             </header>
 
-            <section className="mt-8 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-3" aria-label="Dashboard statistics">
-              <StatCard icon="▣" iconClass="bg-[#eeedff] text-[#4f46e5]" label="Content Plans" value={dashboardData.planCount} />
-              <StatCard icon="✦" iconClass="bg-[#e7faf4] text-[#12a77d]" label="Saved Ideas" value={dashboardData.savedCount} />
-              <StatCard icon="↗" iconClass="bg-[#eeedff] text-[#4f46e5]" label="Predictions Used" value={dashboardData.planCount} />
-            </section>
+            {loading ? (
+              <div className="mt-8 flex items-center justify-center py-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#4f46e5] border-t-transparent"></div>
+              </div>
+            ) : (
+              <>
+                {error && <p className="mt-4 text-sm font-medium text-red-600">{error}</p>}
+                <section className="mt-8 grid min-w-0 grid-cols-1 gap-4 md:grid-cols-3" aria-label="Dashboard statistics">
+                  <StatCard icon="▣" iconClass="bg-[#eeedff] text-[#4f46e5]" label="Content Plans" value={dashboardData.planCount} />
+                  <StatCard icon="✦" iconClass="bg-[#e7faf4] text-[#12a77d]" label="Saved Ideas" value={dashboardData.savedCount} />
+                  <StatCard icon="↗" iconClass="bg-[#eeedff] text-[#4f46e5]" label="Predictions Used" value={0} />
+                </section>
+              </>
+            )}
 
             <section className="mt-8 grid min-w-0 grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
               <RecentPlatforms />

@@ -138,8 +138,8 @@ function HistoryRow({ item, onSelectResult, saved, onToggleSaved }) {
           >
             
           </div>
-          <p className="text-[13px] text-neutral-500 inline-flex items-center">
-            Performance: <span className="font-semibold text-neutral-900">{item.performance}</span>
+           <p className="text-[13px] text-neutral-500 inline-flex items-center">
+             Performance: <span className="font-semibold text-neutral-900">{item.recommendations?.[0]?.performance ?? '—'}</span>
           </p>
         </div>
  
@@ -364,6 +364,16 @@ export default function MyContent() {
         
  
         <div className="flex flex-col gap-3">
+          {loading && (
+            <div className="flex items-center justify-center py-12">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#4f4e65] border-t-transparent"></div>
+            </div>
+          )}
+
+          {error && !loading && (
+            <p className="py-6 text-center text-sm font-medium text-red-600">{error}</p>
+          )}
+
           {!selectedResult && !loading && !error && history.length === 0 && (
             <p className="py-10 text-center text-sm text-neutral-400">
               You don't have any content history yet.

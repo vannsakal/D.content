@@ -11,8 +11,15 @@ const recommendationRoutes = require('./routes/recommendationRoutes');
 const healthRoutes = require('./routes/healthRoutes');
 
 app.use(express.json());
+const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || ['https://meateka.vercel.app'];
 app.use(cors({
-  origin: process.env.CORS_ORIGINS?.split(',') || '*',
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 

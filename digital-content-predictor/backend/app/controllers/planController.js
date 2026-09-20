@@ -151,12 +151,12 @@ exports.viewDashboardData = async (req, res) => {
     try {
         const { userId } = req.user;
 
-        const data = await Plan.getDashboardData(userId, userId);
+        const data = await Plan.getDashboardData(userId);
 
         return res.status(200).json({ data });
     } catch (err) {
         console.error(err);
-        res.status(500).json({
+        return res.status(500).json({
             error: 'Failed to fetch data'
         });
     }
@@ -173,22 +173,6 @@ exports.fetchRecentPlan = async (req, res) => {
         console.error(err);
         return res.status(500).json({
             error: 'Failed to fetch recent plans'  
-        });
-    }
-};
-
-
-exports.viewDashboardData = async (req, res) => {
-    try {
-        const { userId } = req.user;
-
-        const data = await Plan.getDashboardData(userId, userId);
-
-        return res.status(200).json({ data });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: 'Failed to fetch data'
         });
     }
 };

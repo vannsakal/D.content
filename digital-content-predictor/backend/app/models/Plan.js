@@ -35,12 +35,12 @@ class Plan {
         const uniqueInterests = [...new Set(interests.map((item) => String(item).trim()).filter(Boolean))];
 
         for (const interestName of uniqueInterests) {
-            const [rows] = await db.query(
+            const result = await db.query(
                 "SELECT interest_id FROM Interest WHERE interest_name = $1",
                 [interestName]
             );
 
-            let interestId = rows[0]?.interest_id;
+            let interestId = result.rows[0]?.interest_id;
 
             if (!interestId) {
                 const insertResult = await db.query(
@@ -113,7 +113,7 @@ class Plan {
             )
         ]);
 
-        return plans.map(plan => {
+        return result.rows.map(plan => {
             const planRecs = recommendations.filter(r => r.plan_id === plan.plan_id);
 
             const formattedRecs = planRecs.map(rec => {
@@ -143,7 +143,7 @@ class Plan {
 
     static async createSavedPlan(data) {
         const result = await db.query(
-            "INSERT INTO SavedPlan (user_id, plan_id) VALUES ($1, $2)",
+            'INSERT INTO "SavedPlan" (user_id, plan_id) VALUES ($1, $2) RETURNING *',
             [data.userId, data.planId]
         );
         return result.rows[0];
@@ -232,7 +232,9 @@ class Plan {
 
     static async getDashboardData(userId) {
         const result = await db.query(
-            "SELECT (SELECT COUNT(*) FROM Plan WHERE user_id = $1) AS planCount, (SELECT COUNT(*) FROM SavedPlan WHERE user_id = $1) AS savedCount",
+            `SELECT 
+                (SELECT COUNT(*) FROM "Plan" WHERE user_id = $1)::integer AS "planCount",
+                (SELECT COUNT(*) FROM "SavedPlan" WHERE user_id = $1)::integer AS "savedCount"`,
             [userId]
         );
         return result.rows[0] || null;
