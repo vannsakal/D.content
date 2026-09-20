@@ -238,9 +238,18 @@ const toggleChannel = (option) => {
   useEffect(() => {
     api.get('/plan/interest')
       .then(({ data }) => {
-        setInterest(data.interests || []);
+        const loaded = data.interests || [];
+        setInterest(loaded.length > 0 ? loaded : [
+          'Technology', 'Fashion', 'Beauty', 'Fitness', 'Food',
+          'Travel', 'Gaming', 'Music', 'Art', 'Photography',
+          'Sports', 'Education', 'Finance', 'Health', 'Lifestyle',
+        ]);
       })
-      .catch((err) => console.error('Error fetching report data:', err))
+      .catch(() => setInterest([
+        'Technology', 'Fashion', 'Beauty', 'Fitness', 'Food',
+        'Travel', 'Gaming', 'Music', 'Art', 'Photography',
+        'Sports', 'Education', 'Finance', 'Health', 'Lifestyle',
+      ]))
       .finally(() => setLoading(false));
 
       api.get('/recommendation/fetch-data')
