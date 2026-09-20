@@ -12,6 +12,7 @@ export default function Dashboard() {
   const { plan } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [dashboardData, setDashboardData] = useState({
     planCount: 0,
     savedCount: 0
@@ -27,7 +28,7 @@ export default function Dashboard() {
           console.log('API response:', data);
           setDashboardData(data.data);
         })
-        .catch((err) => console.error('Error fetching data:', err))
+        .catch(() => setError("Failed to load dashboard data."))
         .finally(() => setLoading(false));
 
       }
