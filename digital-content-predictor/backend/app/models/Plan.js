@@ -76,11 +76,11 @@ class Plan {
         const planIds = result.rows.map(p => p.plan_id);
 
         const [
-            recommendations,
-            captions,
-            platforms,
-            ideas,
-            alternates
+            recsResult,
+            captionsResult,
+            platformsResult,
+            ideasResult,
+            alternatesResult
         ] = await Promise.all([
             db.query(
                 `SELECT * FROM Recommendation WHERE plan_id = ANY($1::int[])`,
@@ -112,6 +112,12 @@ class Plan {
                 [planIds]
             )
         ]);
+
+        const recommendations = recsResult.rows || [];
+        const captions = captionsResult.rows || [];
+        const platforms = platformsResult.rows || [];
+        const ideas = ideasResult.rows || [];
+        const alternates = alternatesResult.rows || [];
 
         return result.rows.map(plan => {
             const planRecs = recommendations.filter(r => r.plan_id === plan.plan_id);
@@ -160,11 +166,11 @@ class Plan {
         const planIds = result.rows.map(p => p.plan_id);
 
         const [
-            recommendations,
-            captions,
-            platforms,
-            ideas,
-            alternates
+            recsResult,
+            captionsResult,
+            platformsResult,
+            ideasResult,
+            alternatesResult
         ] = await Promise.all([
             db.query(
                 `SELECT * FROM Recommendation WHERE plan_id = ANY($1::int[])`,
@@ -196,6 +202,12 @@ class Plan {
                 [planIds]
             )
         ]);
+
+        const recommendations = recsResult.rows || [];
+        const captions = captionsResult.rows || [];
+        const platforms = platformsResult.rows || [];
+        const ideas = ideasResult.rows || [];
+        const alternates = alternatesResult.rows || [];
 
         return result.rows.map(plan => {
             const planRecs = recommendations.filter(r => r.plan_id === plan.plan_id);
