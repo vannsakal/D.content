@@ -15,6 +15,10 @@ app.use(cors({
   credentials: true
 }));
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'meateka-backend' });
+});
+
 app.use('/api/plan', planRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/recommendation', recommendationRoutes);
