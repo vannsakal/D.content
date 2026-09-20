@@ -11,12 +11,21 @@ WORKDIR /app
 # Copy backend code
 COPY backend/ ./
 
+# Copy Python AI service files
+COPY ai_bridge.py ./
+COPY ai/ ./ai/
+COPY ml/ ./ml/
+
 # Install Node.js dependencies
 RUN npm install
 
 # Install Python dependencies
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
+# Copy and enable startup script
+COPY start.sh ./
+RUN chmod +x start.sh
+
 EXPOSE 8000
 
-CMD ["node", "server.js"]
+CMD ["sh", "./start.sh"]

@@ -426,26 +426,29 @@ const toggleChannel = (option) => {
 
       // Start the request first; the progress steps animate while the AI works.
       // Generation makes several Gemini calls, so allow a long timeout.
-      const request = api.post('/recommendation/generate', payload, { timeout: 120000 });
-      request.catch(() => {}); // avoid an unhandled-rejection warning; the error is handled below
+      const request = api.post('/recommendation/generate', payload, { timeout: 180000 });
+      request.catch(() => {});
 
-      // Animate up to the last step, which stays "in progress" until the response arrives
-      for (let i = 0; i < predictionProcess.length - 1; i++) {
-        await delay(800);
-        setCurrentProcess(i + 1);
+      // Cycle through steps repeatedly until the API responds
+      let step = 0;
+      const animateInterval = setInterval(() => {
+        step = (step + 1) % predictionProcess.length;
+        setCurrentProcess(step);
+      }, 800);
+
+      try {
+        const { data } = await request;
+        setRecommendationData(data.recommendation || null);
+        setCurrentProcess(predictionProcess.length);
+      } catch (err) {
+        console.error('Create recommendation failed:', err.response?.data || err.message);
+        setCreateError(
+          err.response?.data?.error || 'Something went wrong while generating your recommendation.'
+        );
+      } finally {
+        clearInterval(animateInterval);
+        setLoading(false);
       }
-
-      const { data } = await request;
-      setRecommendationData(data.recommendation || null);
-      setCurrentProcess(predictionProcess.length);
-    } catch (err) {
-      console.error('Create recommendation failed:', err.response?.data || err.message);
-      setCreateError(
-        err.response?.data?.error || 'Something went wrong while generating your recommendation.'
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   function handleNext() {
@@ -978,13 +981,13 @@ function Badge({ children, color, bg }) {
               <div className="bg-[#E1E8FD] border-0 rounded-2xl p-3">
                 <BsStars color="#3525CD" className="size-10" />
               </div>
-              <h2 className="mt-4 text-[32px] font-bold text-center tracking-tight text-[#172033]">Meateka is creating your content plan...</h2>
-              <p className="text-[18px] text-center leading-5 text-[#667085]">
+              <h2 className="mt-4 text-2xl font-bold text-center tracking-tight text-[#172033] sm:text-[32px]">Meateka is creating your content plan...</h2>
+              <p className="text-base text-center leading-5 text-[#667085] sm:text-[18px]">
                 Our intelligence engine is analyzing data to build your optimal schedule.
               </p>
             </div>
 
-            <div className="mt-6 mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
+            <div className="mt-6 mx-4 sm:mx-8 md:mx-16 lg:mx-56 rounded-2xl border border-[#d9dbea] bg-[rgb(244,244,255)] p-6 flex flex-col items-start gap-4">
               {predictionProcess.map((process, index) => (
                 <div key={index} className="flex gap-4 items-center justify-center">
                   {index === currentProcess ? (
@@ -1001,7 +1004,7 @@ function Badge({ children, color, bg }) {
                     </div>
                   )}
 
-                  <p className="text-[21px] text-center font-medium leading-5 text-[#333333]">{process}</p>
+                   <p className="text-base text-center font-medium leading-5 text-[#333333] sm:text-[21px]">{process}</p>
                 </div>
               ))}
             </div>

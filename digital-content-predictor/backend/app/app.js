@@ -8,6 +8,7 @@ const app = express();
 const planRoutes = require('./routes/planRoutes');
 const authRoutes = require('./routes/authRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
+const healthRoutes = require('./routes/healthRoutes');
 
 app.use(express.json());
 app.use(cors({
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.use('/api/plan', planRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/recommendation', recommendationRoutes);
+app.use('/api/health', healthRoutes);
 
 
 
