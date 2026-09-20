@@ -7,10 +7,10 @@ class Recommendation {
         const recId = rec.recommendation_id;
 
         const [
-            captions,
-            platforms,
-            ideas,
-            alternates
+            captionsRes,
+            platformsRes,
+            ideasRes,
+            alternatesRes
         ] = await Promise.all([
             db.query(
                 `SELECT caption_id, platform, caption, hashtag
@@ -42,6 +42,11 @@ class Recommendation {
                 [recId]
             )
         ]);
+
+        const captions = captionsRes.rows || [];
+        const platforms = platformsRes.rows || [];
+        const ideas = ideasRes.rows || [];
+        const alternates = alternatesRes.rows || [];
 
         const structuredIdeas = ideas.map((idea) => ({
             ...idea,
@@ -132,7 +137,8 @@ class Recommendation {
                     plan.plan_channel
                 ]
             );
-            planId = planResult.rows[0].plan_id;
+             if (!planResult.rows || planResult.rows.length === 0) throw new Error('Plan insert failed');
+             planId = planResult.rows[0].plan_id;
 
             // Interests
             const interestNames = [...new Set(plan.interests.map((i) => String(i).trim()).filter(Boolean))];
@@ -143,7 +149,8 @@ class Recommendation {
                      RETURNING interest_id`,
                     [name]
                 );
-                const interestId = interestResult.rows[0].interest_id;
+                 if (!interestResult.rows || interestResult.rows.length === 0) throw new Error('Interest insert failed');
+                 const interestId = interestResult.rows[0].interest_id;
 
                 await client.query(
                     'INSERT INTO PlanInterest (plan_id, interest_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
@@ -165,7 +172,8 @@ class Recommendation {
                     clip(ml.time, 50)
                 ]
             );
-            const recommendationId = recResult.rows[0].recommendation_id;
+             if (!recResult.rows || recResult.rows.length === 0) throw new Error('Recommendation insert failed');
+             const recommendationId = recResult.rows[0].recommendation_id;
 
             // Captions
             for (const c of ai.captions || []) {
@@ -189,7 +197,8 @@ class Recommendation {
                     'INSERT INTO Idea (recommendation_id, idea_name, content_type) VALUES ($1, $2, $3) RETURNING idea_id',
                     [recommendationId, clip(idea.idea_name, 255), clip(idea.content_type, 50)]
                 );
-                const ideaId = ideaResult.rows[0].idea_id;
+                 if (!ideaResult.rows || ideaResult.rows.length === 0) throw new Error('Idea insert failed');
+                 const ideaId = ideaResult.rows[0].idea_id;
 
                 for (const alt of idea.alternates || []) {
                     await client.query(

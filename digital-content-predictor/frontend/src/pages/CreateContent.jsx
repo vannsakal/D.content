@@ -226,6 +226,8 @@ export default function CreateContent() {
   const [recommendationData, setRecommendationData] = useState(null);
   const [createError, setCreateError] = useState('');
   const [selectedChannels, setSelectedChannels] = useState([]);
+  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState("TikTok");
 
 const toggleChannel = (option) => {
   setSelectedChannels((prev) =>
@@ -234,6 +236,12 @@ const toggleChannel = (option) => {
       : [...prev, option]
   );
 };
+
+  useEffect(() => {
+    if (recommendationData?.captions?.[0]?.platform) {
+      setActiveTab(recommendationData.captions[0].platform);
+    }
+  }, [recommendationData]);
 
   useEffect(() => {
     api.get('/plan/interest')
@@ -538,23 +546,18 @@ function Badge({ children, color, bg }) {
 }
 
   function renderStepContent() {
-     const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState(
-    recommendationData?.captions?.[0]?.platform || "TikTok"
-  );
-
-  const activeCaption =
+   const activeCaption =
     recommendationData?.captions?.find((c) => c.platform === activeTab) ||
     recommendationData?.captions?.[0];
 
-  const handleCopy = () => {
-    if (!activeCaption) return;
-    navigator.clipboard.writeText(
-      `${activeCaption.caption}\n\n${activeCaption.hashtag}`
-    );
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
+   const handleCopy = () => {
+     if (!activeCaption) return;
+     navigator.clipboard.writeText(
+       `${activeCaption.caption}\n\n${activeCaption.hashtag}`
+     ).catch(() => {});
+     setCopied(true);
+     setTimeout(() => setCopied(false), 1500);
+   };
 
 
 
@@ -1081,15 +1084,15 @@ function Badge({ children, color, bg }) {
             <CardLabel>Engagement Prediction</CardLabel>
             <div style={{ marginTop: 14 }}>
               {platformPredictions.length > 0 ? (
-                platformPredictions.map((prediction) => {
-                  const score = prediction.prediction;
-                  const color = score === "High" ? "#12A77D" : score === "Low" ? "#C2185B" : "#8A8CA3";
-                  const note =
-                    score >= 85 ? "High Potential" : score >= 70 ? "Medium Potential" : "Low Potential";
+                 platformPredictions.map((prediction) => {
+                  const label = String(prediction.prediction || '').toLowerCase();
+                  const numScore = label === "high" ? 85 : label === "low" ? 45 : 70;
+                  const color = label === "high" ? "#12A77D" : label === "low" ? "#C2185B" : "#8A8CA3";
+                  const note = label === "high" ? "High Potential" : label === "low" ? "Low Potential" : "Medium Potential";
                   return (
                     <div key={prediction.platform_id}>
                       <div style={{ height: 18 }} />
-                      <EngagementBar platform={prediction.platform} score={prediction.prediction} color={color} />
+                      <EngagementBar platform={prediction.platform} score={numScore} color={color} />
                     </div>
                   );
                 })

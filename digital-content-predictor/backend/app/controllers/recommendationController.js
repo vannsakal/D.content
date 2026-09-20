@@ -39,10 +39,16 @@ exports.createRecommendation = async (req, res) => {
             console.error('AI service error:', response.status, await response.text());
             return res.status(502).json({ error: 'Recommendation generation failed' });
         }
-        ({ ml, ai } = await response.json());
+        const json = await response.json();
+        ml = json.ml;
+        ai = json.ai;
     } catch (err) {
         console.error('AI service unreachable:', err);
         return res.status(502).json({ error: 'Recommendation service unavailable' });
+    }
+
+    if (!ml || !ai) {
+        return res.status(502).json({ error: 'Recommendation service returned incomplete data' });
     }
 
     // 2. Save Plan + Recommendation tree atomically
