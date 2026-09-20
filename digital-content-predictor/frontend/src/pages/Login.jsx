@@ -42,8 +42,9 @@ export default function Login() {
       return;
     }
 
-    if (!signIn(email, password)) {
-      setError("Invalid email or password. Check your details and try again.");
+    const result = await signIn(email, password);
+    if (!result.success) {
+      setError(result.error);
       return;
     }
 

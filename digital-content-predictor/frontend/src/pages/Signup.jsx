@@ -3,7 +3,6 @@ import { ArrowRight, Check, Mail, UserRound } from "lucide-react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/auth/PasswordInput.jsx";
 import SocialSignupButtons from "../components/auth/SocialSignupButtons.jsx";
-import api from '../services/api';
 
 import { useAuth } from "../context/AuthContext.jsx";
 import logo from '../assets/meateaka.png';
@@ -15,7 +14,7 @@ const passwordRules = [
 ];
 
 export default function Signup() {
-  const { isAuthenticated, register } = useAuth();
+  const { isAuthenticated, signUp } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", password: "", confirm: "" });
   const [agreed, setAgreed] = useState(false);
@@ -49,34 +48,14 @@ export default function Signup() {
     
     setLoading(true);
 
-    // Using a promise-based delay or directly awaiting the API
-    try {
-        const result = {
-            first_name: form.firstName,
-            last_name: form.lastName, 
-            email: form.email,
-            password_hash: form.password
-        };
-
-        // Simulate network delay if desired, or make the API call directly
-        await new Promise(resolve => window.setTimeout(resolve, 500));
-
-        // Await your API call (assuming api.post returns a response or throws on error)
-        const response = await api.post('/auth/register', result);
-
-        // Optional: check if response contains an explicit error format from your backend
-        if (response && response.error) {
-            setError(response.error);
-            setLoading(false);
-            return;
-        }
-
-        navigate("/dashboard", { replace: true });
-    } catch (err) {
-        // Handle network errors or server exceptions gracefully
-        setError(err.response?.data?.message || "We could not create your account.");
-        setLoading(false);
+    const result = await signUp(form.email, form.password, form.firstName, form.lastName);
+    if (!result.success) {
+      setError(result.error);
+      setLoading(false);
+      return;
     }
+
+    navigate("/dashboard", { replace: true });
 }
 
   return (
