@@ -406,52 +406,50 @@ const toggleChannel = (option) => {
     setCurrentProcess(0);
     setCreateError('');
 
+    // Field names match the backend's createRecommendation validation
+    const payload = {
+      plan_purpose: inputData.purpose,
+      // "Existing Content" plans skip the product step, so fall back to placeholders
+      product_name: inputData.product || 'Existing content',
+      product_category: inputData.category || 'Business',
+      product_description: inputData.productDescription,
+      demographics_age: inputData.age,
+      demographics_gender: inputData.gender,
+      interests: Array.isArray(inputData.interests)
+        ? inputData.interests
+        : inputData.interests ? [inputData.interests] : [],
+      audience_description: inputData.audienceDescription,
+      plan_goal: inputData.goal,
+      plan_channel: inputData.channel,
+    };
+
+    // Start the request first; the progress steps animate while the AI works.
+    // Generation makes several Gemini calls, so allow a long timeout.
+    const request = api.post('/recommendation/generate', payload, { timeout: 180000 });
+    request.catch(() => {});
+
+    // Cycle through steps repeatedly until the API responds
+    let step = 0;
+    const animateInterval = setInterval(() => {
+      step = (step + 1) % predictionProcess.length;
+      setCurrentProcess(step);
+    }, 800);
+
     try {
-      // Field names match the backend's createRecommendation validation
-      const payload = {
-        plan_purpose: inputData.purpose,
-        // "Existing Content" plans skip the product step, so fall back to placeholders
-        product_name: inputData.product || 'Existing content',
-        product_category: inputData.category || 'Business',
-        product_description: inputData.productDescription,
-        demographics_age: inputData.age,
-        demographics_gender: inputData.gender,
-        interests: Array.isArray(inputData.interests)
-          ? inputData.interests
-          : inputData.interests ? [inputData.interests] : [],
-        audience_description: inputData.audienceDescription,
-        plan_goal: inputData.goal,
-        plan_channel: inputData.channel,
-      };
-
-      // Start the request first; the progress steps animate while the AI works.
-      // Generation makes several Gemini calls, so allow a long timeout.
-      const request = api.post('/recommendation/generate', payload, { timeout: 180000 });
-      request.catch(() => {});
-
-      // Cycle through steps repeatedly until the API responds
-      let step = 0;
-      const animateInterval = setInterval(() => {
-        step = (step + 1) % predictionProcess.length;
-        setCurrentProcess(step);
-      }, 800);
-
-      try {
-        const { data } = await request;
-        setRecommendationData(data.recommendation || null);
-        setCurrentProcess(predictionProcess.length);
-      } catch (err) {
-        console.error('Create recommendation failed:', err.response?.data || err.message);
-        const errorMsg = err.response?.data?.error;
-        setCreateError(
-          typeof errorMsg === 'string' ? errorMsg :
-          errorMsg?.message || 'Something went wrong while generating your recommendation.'
-        );
-      } finally {
-        clearInterval(animateInterval);
-        setLoading(false);
-      }
-  };
+      const { data } = await request;
+      setRecommendationData(data.recommendation || null);
+      setCurrentProcess(predictionProcess.length);
+    } catch (err) {
+      console.error('Create recommendation failed:', err.response?.data || err.message);
+      const errorMsg = err.response?.data?.error;
+      setCreateError(
+        typeof errorMsg === 'string' ? errorMsg :
+        errorMsg?.message || 'Something went wrong while generating your recommendation.'
+      );
+    } finally {
+      clearInterval(animateInterval);
+      setLoading(false);
+    }
 
   function handleNext() {
     if (currentStep < steps.length - 1) {
