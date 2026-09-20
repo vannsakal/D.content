@@ -4,16 +4,24 @@ require('dotenv').config();
 
 dns.setDefaultResultOrder('ipv4first');
 
+let host = process.env.DB_HOST;
+try {
+  const addresses = dns.resolve4Sync(host);
+  if (addresses.length > 0) host = addresses[0];
+} catch (e) {
+  console.warn('IPv4 resolution failed, using hostname as-is');
+}
+
 const pool = new Pool({
-  host: process.env.DB_HOST,
+  host,
   port: parseInt(process.env.DB_PORT || '5432'),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  max: 5,
+  max: 3,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
-  ssl: { rejectUnauthorized: false },  // Supabase requires SSL
+  ssl: { rejectUnauthorized: false },
 });
 
 pool.on('connect', () => {
