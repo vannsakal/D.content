@@ -1046,66 +1046,62 @@ function Badge({ children, color, bg }) {
         return (
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-3 mb-5 sm:grid-cols-4 sm:gap-3.5">
-              <StatCard icon={<Lightbulb size={16} color="#6C5CE7" />} label="Recommended Content" value={recommendationData.title || '—'} />
-              <StatCard icon={<Share2 size={16} color="#00B37E" />} label="Best Platform" value={recommendationData.platform || '—'} />
-              <StatCard icon={<TrendingUp size={16} color="#6C5CE7" />} label="Expected Engagement" value={recommendationData.performance || '—'} />
-              <StatCard icon={<Clock size={16} color="#8A8CA3" />} label="Best Posting Time" value={recommendationData.time || '—'} />
+              <StatCard icon={<Lightbulb size={16} color="#6C5CE7" />} label="Recommended Content" value={recommendationData.title || '—'} className="min-w-0" />
+              <StatCard icon={<Share2 size={16} color="#00B37E" />} label="Best Platform" value={recommendationData.platform || '—'} className="min-w-0" />
+              <StatCard icon={<TrendingUp size={16} color="#6C5CE7" />} label="Expected Engagement" value={recommendationData.performance || '—'} className="min-w-0" />
+              <StatCard icon={<Clock size={16} color="#8A8CA3" />} label="Best Posting Time" value={recommendationData.time || '—'} className="min-w-0" />
             </div>
 
 
             <div>
-              <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-[4fr_1fr] sm:gap-4">
-          <Card>
+              <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-[4fr_1fr] sm:gap-4 min-w-0">
+          <Card className="overflow-hidden p-4 sm:p-5">
             <div className="border-b border-[#aaaaaa] pb-3">
-              <CardLabel >Content Idea Recommendation</CardLabel>
+              <CardLabel>Recommendation</CardLabel>
             </div>
             
-            <h2 className="pt-3" style={{ fontSize: 18, fontWeight: 600, color: "#161624", margin: "6px 0 10px"}}>
+            <h2 className="pt-3 text-base font-semibold text-[#161624] sm:text-lg break-words">
               {primaryIdea?.idea_name || 'No idea generated yet'}
             </h2>
-            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+            <div className="flex flex-wrap gap-2 mb-3">
               {primaryIdea?.content_type && (
                 <Badge color="#6C5CE7" bg="#F0EDFE">{primaryIdea.content_type}</Badge>
               )}
             </div>
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 13, color: "#8A8CA3", fontWeight: 600, marginBottom: 8 }}>
-                Alternative Ideas:
-              </div>
+            <div className="mb-4">
+              <p className="text-xs font-semibold text-[#8A8CA3] mb-2">Alternative Ideas:</p>
               {alternates.length > 0 ? (
                 alternates.map((alt) => (
-                  <div key={alt.alternate_id} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#4A4C5E", marginBottom: 6 }}>
-                    <span style={{ color: "#6C5CE7" }}>▸</span> {alt.idea_name}
+                  <div key={alt.alternate_id} className="flex items-center gap-2 text-sm text-[#4A4C5E] mb-1">
+                    <span className="text-[#6C5CE7]">▸</span> <span className="break-words">{alt.idea_name}</span>
                   </div>
                 ))
               ) : (
-                <div style={{ fontSize: 13, color: "#9A9CAF" }}>No alternative ideas available.</div>
+                <p className="text-xs text-[#9A9CAF]">No alternative ideas available.</p>
               )}
             </div>
           </Card>
- 
-          <Card>
-            <CardLabel>Engagement Prediction</CardLabel>
-            <div style={{ marginTop: 14 }}>
+
+          <Card className="overflow-hidden p-4 sm:p-5">
+            <CardLabel>Engagement</CardLabel>
+            <div className="mt-3">
               {platformPredictions.length > 0 ? (
                  platformPredictions.map((prediction) => {
                   const label = String(prediction.prediction || '').toLowerCase();
                   const numScore = label === "high" ? 85 : label === "low" ? 45 : 70;
                   const color = label === "high" ? "#12A77D" : label === "low" ? "#C2185B" : "#8A8CA3";
-                  const note = label === "high" ? "High Potential" : label === "low" ? "Low Potential" : "Medium Potential";
                   return (
-                    <div key={prediction.platform_id}>
-                      <div style={{ height: 18 }} />
+                    <div key={prediction.platform_id} className="mt-3">
                       <EngagementBar platform={prediction.platform} score={numScore} color={color} />
                     </div>
                   );
                 })
               ) : (
-                <div style={{ fontSize: 13, color: "#9A9CAF" }}>No engagement predictions available.</div>
+                <p className="text-xs text-[#9A9CAF]">No engagement predictions available.</p>
               )}
             </div>
-            <p style={{ fontSize: 12.5, color: "#9A9CAF", marginTop: 18, lineHeight: 1.5 }}>
-              <span>{recommendationData.platform || '—'}</span><span>'s algorithm favors this hook format for your niche right now, suggesting higher reach.</span>
+            <p className="text-xs text-[#9A9CAF] mt-4">
+              <span>{recommendationData.platform || '—'}</span> algorithm favors this hook format for your niche.
             </p>
           </Card>
         </div>
@@ -1114,36 +1110,30 @@ function Badge({ children, color, bg }) {
 
 
               <div>
-                <Card>
+                <Card className="overflow-hidden p-4 sm:p-5">
             <CardLabel>Caption &amp; Hashtags</CardLabel>
-            <div style={{ display: "flex", gap: 18, borderBottom: "1px solid #ECEDF3", marginTop: 12, marginBottom: 14 }}>
+            <div className="flex gap-3 border-b border-[#ECEDF3] mt-3 mb-3 overflow-x-auto">
               {(recommendationData.captions || []).map((tab) => (
                 <button
                   key={tab.caption_id}
                   onClick={() => setActiveTab(tab.platform)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: "0 0 10px",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    color: activeTab === tab.platform ? "#5B4FE5" : "#9A9CAF",
-                    borderBottom: activeTab === tab.platform ? "2px solid #5B4FE5" : "2px solid transparent",
-                    textTransform: "capitalize",
-                  }}
+                  className={`pb-2 text-sm font-semibold whitespace-nowrap border-b-2 ${
+                    activeTab === tab.platform
+                      ? "text-[#5B4FE5] border-[#5B4FE5]"
+                      : "text-[#9A9CAF] border-transparent"
+                  }`}
                 >
                   {tab.platform}
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F6F5FE", borderRadius: 10, padding: 14, fontSize: 13.5, color: "#4A4C5E", lineHeight: 1.6, minHeight: 90, whiteSpace: "pre-wrap" }}>
+            <div className="bg-[#F6F5FE] rounded-lg p-3 text-sm text-[#4A4C5E] leading-relaxed min-h-[80px] whitespace-pre-wrap break-words">
               {activeCaption && (
                 <>
                   {activeCaption.caption || '---'}
                   <br />
                   <br />
-                  <span style={{ color: "#5B4FE5" }}>
+                  <span className="text-[#5B4FE5]">
                     {activeCaption.hashtag}
                   </span>
                 </>

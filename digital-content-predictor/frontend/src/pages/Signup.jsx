@@ -69,7 +69,7 @@ export default function Signup() {
                   <p className="relative z-10 hidden text-xs text-[#8582a5] sm:block">© 2026 Meateka Content Intelligence. All rights reserved.</p>
                 </section>
 
-        <section className="order-1 flex min-h-screen items-center justify-center bg-white px-6 py-12 sm:px-12 lg:order-2 lg:px-16 lg:py-16">
+        <section className="order-1 flex items-center justify-center bg-white px-4 py-8 sm:px-12 sm:py-12 lg:order-2 lg:px-16 lg:py-16">
           <div className="w-full max-w-sm rounded-3xl border border-[#e5e3ef] bg-white p-5 shadow-[0_18px_50px_rgba(58,47,130,0.08)] transition-shadow duration-500 hover:shadow-[0_22px_60px_rgba(58,47,130,0.11)] sm:max-w-[470px] sm:p-9">
             <div className="mb-6 sm:mb-8"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7669d8]">Creator Suite</p><h2 className="mt-3 text-2xl font-bold tracking-[-0.03em] text-[#20213c] sm:text-3xl lg:text-4xl">Create your account</h2><p className="mt-3 text-sm leading-6 text-[#85869a]">Start creating and managing your content today.</p></div>
             <form onSubmit={handleSubmit} className="space-y-4">

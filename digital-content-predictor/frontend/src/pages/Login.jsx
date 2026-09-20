@@ -84,7 +84,7 @@ export default function Login() {
 
   return (
     <main className="min-h-screen bg-white text-[#20213c]">
-      <div className="grid min-h-screen lg:grid-cols-[minmax(360px,0.9fr)_1.1fr]">
+      <div className="grid min-h-0 lg:min-h-screen lg:grid-cols-[minmax(360px,0.9fr)_1.1fr]">
         <section className="relative flex min-h-[180px] flex-col overflow-hidden bg-[#eeedff] px-5 py-4 sm:min-h-[360px] sm:px-12 sm:py-6 lg:min-h-screen lg:px-16 lg:py-12">
           <div className="absolute -right-20 -top-20 hidden h-64 w-64 rounded-full border-[34px] border-white/30 sm:block" />
           <div className="absolute bottom-20 -left-28 hidden h-56 w-56 rounded-full border-[28px] border-[#d8d2fb]/70 sm:block" />
@@ -93,9 +93,9 @@ export default function Login() {
           <p className="relative z-10 hidden text-xs text-[#8582a5] sm:block">© 2026 Meateka Content Intelligence. All rights reserved.</p>
         </section>
 
-        <section className="flex min-h-[280px] items-center justify-center bg-white py-6 sm:min-h-[500px] sm:py-14 lg:min-h-[620px] lg:px-24 lg:py-20">
+        <section className="flex items-center justify-center bg-white px-4 py-8 sm:min-h-[500px] sm:py-14 lg:min-h-[620px] lg:px-24 lg:py-20">
           <div className="w-full max-w-[430px]">
-            <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7669d8]">Welcome back</p><h2 className="mt-3 text-3xl font-bold tracking-[-0.04em] text-[#20213c] sm:text-4xl">Sign in to Meateka</h2><p className="mt-3 text-sm leading-6 text-[#85869a]">Enter your details to continue to your content intelligence dashboard.</p></div>
+            <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7669d8]">Welcome back</p><h2 className="mt-3 text-2xl font-bold tracking-[-0.04em] text-[#20213c] sm:text-3xl lg:text-4xl">Sign in to Meateka</h2><p className="mt-3 text-sm leading-6 text-[#85869a]">Enter your details to continue to your content intelligence dashboard.</p></div>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div><label htmlFor="email" className="text-xs font-bold text-[#3d3e58]">Email address</label><div className="relative mt-2"><Mail size={17} strokeWidth={1.8} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a2a3b7]" /><input id="email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="h-12 w-full rounded-xl border border-[#dfdfea] bg-[#fcfcfe] pl-11 pr-4 text-sm text-[#20213c] outline-none transition focus:border-[#7669d8] focus:bg-white focus:ring-4 focus:ring-[#7669d8]/10" required /></div></div>
               <div><div className="flex items-center justify-between"><label htmlFor="password" className="text-xs font-bold text-[#3d3e58]">Password</label><button type="button" onClick={() => setError("Password reset is not configured yet. Contact your administrator for help.")} className="text-xs font-semibold text-[#7669d8] transition hover:text-[#5748c9]">Forgot password?</button></div><div className="relative mt-2"><LockKeyhole size={17} strokeWidth={1.8} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#a2a3b7]" /><input id="password" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Enter your password" className="h-12 w-full rounded-xl border border-[#dfdfea] bg-[#fcfcfe] pl-11 pr-4 text-sm text-[#20213c] outline-none transition focus:border-[#7669d8] focus:bg-white focus:ring-4 focus:ring-[#7669d8]/10" required /></div></div>
