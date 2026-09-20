@@ -93,8 +93,8 @@ function HistoryRow({ item, onSelectResult, saved, onToggleSaved }) {
   return (
     
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-neutral-200 rounded-xl px-5 py-4">
-      <div className="flex items-center gap-5   min-w-0">
+        <div className="flex flex-col gap-3 border border-neutral-200 rounded-xl px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:py-4">
+      <div className="flex items-center gap-3 min-w-0 sm:gap-5">
         <button
           type="button"
           onClick={toggleSaved}
@@ -106,21 +106,14 @@ function HistoryRow({ item, onSelectResult, saved, onToggleSaved }) {
             saved ? "text-yellow-400" : "text-neutral-300 hover:text-yellow-400"
           }`}
         >
-          <Star size={20} fill={saved ? "currentColor" : "none"} strokeWidth={2} />
+          <Star size={18} fill={saved ? "currentColor" : "none"} strokeWidth={2} />
         </button>
 
-        <div>
-          <div className={`flex items-center justify-center text-center border w-fit h-fit rounded-2xl px-1.5 py-1.5 ${item.plan_channel === 'TikTok' ? 'bg-black my-1.5' : item.plan_channel === 'Instagram' ? 'my-1.5 bg-gradient-to-tr from-[#f58529] via-[#dd2c7c] to-[#8034b7]' : 'border-0'}`}>
-                                {item.plan_channel === 'TikTok' ? <FaTiktok className="size-6 text-[#ffffff]" /> : item.plan_channel === 'Instagram' ? <FaInstagram className="size-6 text-[#ffffff]" /> : <FaFacebook color="#3525CD" className="size-9" />}
-                              </div>
-        </div>
-       
-       
-        <div className="min-w-0">
-          <p className="text-[15px] font-semibold text-neutral-900 truncate">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-neutral-900 truncate sm:text-[15px]">
             {item.product_name}
           </p>
-          <div className="flex items-center gap-1.5 text-[13px] text-neutral-500 mt-0.5 flex-wrap">
+          <div className="flex items-center gap-1.5 text-xs text-neutral-500 mt-0.5 flex-wrap sm:text-[13px]">
             <span>{item.plan_channel}</span>
             <span className="text-neutral-300">•</span>
             <Clock size={12} className="text-neutral-400" />
@@ -130,31 +123,16 @@ function HistoryRow({ item, onSelectResult, saved, onToggleSaved }) {
           </div>
         </div>
       </div>
- 
-      <div className="flex items-center gap-4 sm:gap-5 shrink-0 justify-between sm:justify-end">
-        <div className="text-right">
-          <div
-            className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full mb-1 `}
-          >
-            
-          </div>
-           <p className="text-[13px] text-neutral-500 inline-flex items-center">
-             Performance: <span className="font-semibold text-neutral-900">{item.recommendations?.[0]?.performance ?? '—'}</span>
-          </p>
-        </div>
- 
-        <button
-          type="button"
-          aria-label="Re-run analysis"
-          className="text-neutral-400 hover:text-neutral-600 transition-colors"
-        >
-          <RefreshCw size={16} />
-        </button>
- 
+
+      <div className="flex items-center gap-2 sm:gap-4">
+        <p className="text-xs text-neutral-500">
+          <span className="font-semibold text-neutral-900">{item.recommendations?.[0]?.performance ?? '—'}</span>
+        </p>
+
         <button
           type="button"
           disabled={!canView}
-          className={`text-sm font-semibold px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+          className={`flex-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors sm:flex-none sm:px-4 sm:whitespace-nowrap ${
             !canView 
               ? "bg-neutral-100 text-neutral-400 cursor-not-allowed" 
               : "bg-violet-50 text-violet-600 hover:bg-violet-100"
@@ -165,7 +143,7 @@ function HistoryRow({ item, onSelectResult, saved, onToggleSaved }) {
             }
           }}
         >
-          {canView ? "View Results" : "No Results"}
+          {canView ? "View" : "No Results"}
         </button>
       </div>
     </div>

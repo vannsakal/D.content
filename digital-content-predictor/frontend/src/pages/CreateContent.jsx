@@ -474,36 +474,27 @@ const toggleChannel = (option) => {
     navigate('/plan/my-content', { replace: true });
   }
 
-  function StatCard({ icon, label, value }) {
+  function StatCard({ icon, label, value, className = "" }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: "1px solid #ECEDF3" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, marginBottom: 6 , fontWeight: 600, color: "#555555"}}>
-        {icon} {label}
+    <div className={`rounded-xl border border-[#ECEDF3] bg-white p-2 sm:p-3 ${className}`}>
+      <div className="flex items-center gap-1 text-xs font-semibold text-[#555555] sm:text-[12px] sm:gap-1.5">
+        {icon} <span className="truncate">{label}</span>
       </div>
-      <div style={{ fontSize: 14.5, fontWeight: 700, color: "#161624", lineHeight: 1.3 }}>{value}</div>
+      <div className="text-sm font-bold text-[#161624] leading-tight sm:text-[14.5px] break-words">{value}</div>
     </div>
   );
 }
 
-function Card({ children }) {
+function Card({ children, className = "" }) {
   return (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: 14,
-        padding: 22,
-        border: "1px solid #ECEDF3",
-      }}
-    >
+    <div className={`rounded-2xl border border-[#ECEDF3] bg-white p-3 sm:p-5 ${className}`}>
       {children}
     </div>
   );
 }
- 
+
 function CardLabel({ children }) {
-  return (
-    <div style={{ fontSize: 20, fontWeight: 700, color: "#161624" }}>{children}</div>
-  );
+  return <div className="text-sm font-bold text-[#161624] sm:text-base">{children}</div>;
 }
 
 function StratRow({ label, a, b }) {
@@ -518,15 +509,15 @@ function StratRow({ label, a, b }) {
  
 function EngagementBar({ platform, score, color, note }) {
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13.5, marginBottom: 6 }}>
-        <span style={{ color: "#4A4C5E", fontWeight: 600 }}>{platform}</span>
-        <span style={{ color, fontWeight: 700 }}>{score}</span>
+    <div className="w-full min-w-0">
+      <div className="flex justify-between text-xs font-medium mb-1 sm:text-[13.5px]">
+        <span className="text-[#4A4C5E] font-semibold truncate mr-2">{platform}</span>
+        <span style={{ color }} className="font-bold shrink-0">{score}</span>
       </div>
-      <div style={{ height: 2, background: "#F0F0F5", borderRadius: 999, overflow: "hidden" }}>
-        <div style={{ width: `${score}%`, height: "100%", background: color, borderRadius: 999 }} />
+      <div className="h-1.5 rounded-full bg-[#F0F0F5] overflow-hidden sm:h-2">
+        <div className="h-full rounded-full" style={{ width: `${score}%`, background: color }} />
       </div>
-      <div style={{ fontSize: 12, color: "#9A9CAF", marginTop: 4 }}>{note}</div>
+      {note && <p className="text-[10px] text-[#9A9CAF] mt-1 sm:text-xs">{note}</p>}
     </div>
   );
 }
@@ -535,14 +526,8 @@ function EngagementBar({ platform, score, color, note }) {
 function Badge({ children, color, bg }) {
   return (
     <span
-      style={{
-        background: bg,
-        color,
-        fontSize: 12,
-        fontWeight: 600,
-        padding: "4px 10px",
-        borderRadius: 999,
-      }}
+      className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full sm:text-xs sm:px-2.5 sm:py-1"
+      style={{ background: bg, color }}
     >
       {children}
     </span>
@@ -878,26 +863,26 @@ function Badge({ children, color, bg }) {
               </div>
             </div>
 
-            <div className="col-span-2 mt-8 rounded-xl border-2 px-5 py-5 bg-white self-stretch border-[#dddddd]">
+            <div className="col-span-2 mt-8 rounded-xl border-2 px-4 py-4 bg-white self-stretch border-[#dddddd] sm:px-5 sm:py-5">
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-2">
-                  <GrDocumentText color="#3525CD" className="size-6" />
-                  <h2 className="mt-2 text-[22px] font-semibold tracking-[0.004em] text-[#333333] sm:text-[22px]">Audience Description</h2>
+                  <GrDocumentText color="#3525CD" className="size-5" />
+                  <h2 className="text-sm font-semibold tracking-[0.004em] text-[#333333] sm:text-base">Audience Description</h2>
                 </div>
                 <div className="flex pt-2">
-                  <p className="text-[16px] font-medium text-[#777777]"></p>
+                  <p className="text-xs font-medium text-[#777777] sm:text-sm"></p>
                 </div>
               </div>
 
-              <p className="mt-1.5 text-[16px] leading-5 text-[#667085]">
+              <p className="mt-1.5 text-xs leading-5 text-[#667085] sm:text-sm">
                 Add any specific nuances about your audience's pain points, desires, or income levels.
               </p>
               <textarea
                 value={inputData.audienceDescription}
                 onChange={(event) => updateInputField('audienceDescription', event.target.value)}
-                rows={6}
-                placeholder="e.g. Professional women looking for high-quality, time-saving  skincare routines..."
-                className="mt-2 h-4/5 w-full rounded-2xl border border-[#aaaaaa] bg-[#fcfaff] px-4 py-4 text-sm text-[#172033] outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eeedff]"
+                rows={3}
+                placeholder="e.g. Professional women looking for high-quality, time-saving skincare routines..."
+                className="mt-2 h-20 w-full rounded-xl border border-[#aaaaaa] bg-[#fcfaff] px-3 py-2 text-sm text-[#172033] outline-none focus:border-[#4f46e5] focus:ring-2 focus:ring-[#eeedff] sm:h-28 sm:rounded-2xl sm:px-4 sm:py-3"
               />
             </div>
           </div>
