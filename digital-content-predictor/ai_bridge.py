@@ -27,6 +27,11 @@ app = FastAPI()
 ai = AIService()
 
 
+@app.get("/")
+def health():
+    return {"status": "ok"}
+
+
 class PlanInput(BaseModel):
     plan_purpose: Literal["Content Creator", "Business", "Existing Content"]
     product_name: str
