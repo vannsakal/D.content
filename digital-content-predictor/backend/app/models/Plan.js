@@ -143,7 +143,7 @@ class Plan {
 
     static async createSavedPlan(data) {
         const result = await db.query(
-            'INSERT INTO "SavedPlan" (user_id, plan_id) VALUES ($1, $2) RETURNING *',
+            'INSERT INTO SavedPlan (user_id, plan_id) VALUES ($1, $2) RETURNING *',
             [data.userId, data.planId]
         );
         return result.rows[0];
@@ -233,8 +233,8 @@ class Plan {
     static async getDashboardData(userId) {
         const result = await db.query(
             `SELECT 
-                (SELECT COUNT(*) FROM "Plan" WHERE user_id = $1)::integer AS "planCount",
-                (SELECT COUNT(*) FROM "SavedPlan" WHERE user_id = $1)::integer AS "savedCount"`,
+                (SELECT COUNT(*) FROM Plan WHERE user_id = $1)::integer AS "planCount",
+                (SELECT COUNT(*) FROM SavedPlan WHERE user_id = $1)::integer AS "savedCount"`,
             [userId]
         );
         return result.rows[0] || null;
