@@ -6,7 +6,9 @@ when one is rate-limited. Uses round-robin distribution and respects
 a configurable cooldown before retrying exhausted keys.
 """
 
+import json
 import os
+import re
 import time
 from itertools import cycle
 from dotenv import load_dotenv
@@ -26,6 +28,15 @@ API_KEYS = [k for k in API_KEYS if k]
 
 if not API_KEYS:
     raise RuntimeError("No Google API keys configured. Set GOOGLE_API_KEY_1, GOOGLE_API_KEY_2, or GOOGLE_API_KEY_3.")
+
+
+def _extract_json(text: str) -> dict:
+    """Extract JSON from text that may contain markdown fences."""
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:json)?\s*\n?", "", text)
+        text = re.sub(r"\n?```\s*$", "", text)
+    return json.loads(text.strip())
 
 # Round-robin iterator
 _key_cycle = cycle(range(len(API_KEYS)))

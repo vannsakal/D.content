@@ -6,7 +6,7 @@ hashtags without regenerating the whole caption.
 import json
 import time
 
-from shared.gemini_client import call_gemini
+from shared.gemini_client import call_gemini, _extract_json
 
 VALID_PLATFORMS = ["TikTok", "Instagram", "Facebook"]
 
@@ -44,7 +44,7 @@ def generate_hashtags(
     for attempt in range(retries + 1):
         try:
             response = call_gemini(prompt)
-            result = json.loads(response.text)
+            result = _extract_json(response.text)
             hashtags = result.get("hashtags", [])
             return [h for h in hashtags if isinstance(h, str)][:num_hashtags]
 

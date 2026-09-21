@@ -7,7 +7,7 @@ branching on Content Creator vs Business Owner.
 import json
 import time
 
-from shared.gemini_client import call_gemini
+from shared.gemini_client import call_gemini, _extract_json
 from shared.prompts import CAPTION_PROMPT_CREATOR, CAPTION_PROMPT_BUSINESS
 from shared.safety_check import is_content_safe, SafetyCheckUnavailable
 
@@ -43,7 +43,7 @@ def generate_caption(
     for attempt in range(retries + 1):
         try:
             response = call_gemini(prompt)
-            result = json.loads(response.text)
+            result = _extract_json(response.text)
             caption = result.get("caption", "").strip()
             hashtags = [h.lstrip("#") for h in result.get("hashtags", []) if isinstance(h, str)]
 

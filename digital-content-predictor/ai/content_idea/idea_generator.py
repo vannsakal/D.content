@@ -7,7 +7,7 @@ and returns a content idea + content type + best posting times.
 import json
 import time
 
-from shared.gemini_client import call_gemini
+from shared.gemini_client import call_gemini, _extract_json
 from shared.prompts import CONTENT_IDEA_PROMPT
 from shared.posting_times import ALL_PLATFORMS_POSTING
 
@@ -50,7 +50,7 @@ def generate_content_idea(
     for attempt in range(retries + 1):
         try:
             response = call_gemini(prompt)
-            result = json.loads(response.text)
+            result = _extract_json(response.text)
 
             if result.get("content_type") not in VALID_CONTENT_TYPES:
                 result["content_type"] = "Short Video"

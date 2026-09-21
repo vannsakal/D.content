@@ -14,14 +14,13 @@ Usage:
     response = ai.generate_single_request(category, product, target_audience, goal, platform, content_purpose)
 """
 
-import json
 import time
 
 from content_idea.idea_generator import generate_content_idea
 from caption.caption_generator import generate_caption, generate_captions_for_platforms
 from hashtag.hashtag_generator import generate_hashtags
 from shared.safety_check import is_content_safe
-from shared.gemini_client import call_gemini
+from shared.gemini_client import call_gemini, _extract_json
 from shared.posting_times import ALL_PLATFORMS_POSTING
 from shared.prompts import COMBINED_CONTENT_PROMPT_CREATOR, COMBINED_CONTENT_PROMPT_BUSINESS
 
@@ -130,7 +129,7 @@ class AIService:
         for attempt in range(3):
             try:
                 response = call_gemini(prompt)
-                result = json.loads(response.text)
+                result = _extract_json(response.text)
 
                 if not result.get("recommended_idea"):
                     return self._empty_response()
