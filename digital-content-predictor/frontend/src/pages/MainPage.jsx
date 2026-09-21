@@ -1,4 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
+
+const DESIGN_WIDTH = 1280;
+
+function useFitScale() {
+  const [scale, setScale] = useState(1);
+  useLayoutEffect(() => {
+    const update = () => {
+      const w = document.documentElement.clientWidth;
+      setScale(Math.min(1, w / DESIGN_WIDTH));
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
+  }, []);
+  return scale;
+}
 import {
   ArrowRight,
   BarChart3,
@@ -152,8 +172,11 @@ function MainPage() {
   
 ];
 
+  const scale = useFitScale();
+
   return (
-    <div className="min-h-screen overflow-hidden bg-[#fbfaff] text-[#20233d]">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#fbfaff] text-[#20233d]">
+      <div style={{ zoom: scale }}>
       <main>
         <section
           id="home"
@@ -625,6 +648,7 @@ function MainPage() {
           </button>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
