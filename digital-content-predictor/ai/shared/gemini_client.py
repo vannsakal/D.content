@@ -38,6 +38,17 @@ def _extract_json(text: str) -> dict:
         text = re.sub(r"\n?```\s*$", "", text)
     return json.loads(text.strip())
 
+
+def _extract_retry_delay(error_str: str) -> float:
+    """Extract retry delay in seconds from Gemini 429 error message."""
+    match = re.search(r'retry in ([\d.]+)s', error_str)
+    if match:
+        return float(match.group(1))
+    match = re.search(r'retryDelay["\s:]+([\d.]+)', error_str)
+    if match:
+        return float(match.group(1))
+    return 5.0
+
 # Round-robin iterator
 _key_cycle = cycle(range(len(API_KEYS)))
 _current_key_idx = next(_key_cycle)
@@ -111,7 +122,7 @@ def call_gemini(prompt: str, max_retries: int = None):
         Exception: Non-quota errors are raised immediately.
     """
     if max_retries is None:
-        max_retries = len(API_KEYS) * 3
+        max_retries = len(API_KEYS)
 
     last_error = None
 
@@ -128,8 +139,12 @@ def call_gemini(prompt: str, max_retries: int = None):
         except Exception as e:
             error_str = str(e)
             if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
+                wait_time = _extract_retry_delay(error_str)
+                print(f"[gemini_client] Rate limited on key {_current_key_idx + 1}. Waiting {wait_time}s...")
                 mark_exhausted()
                 last_error = e
+                if attempt < max_retries - 1:
+                    time.sleep(wait_time)
                 continue
             raise
 

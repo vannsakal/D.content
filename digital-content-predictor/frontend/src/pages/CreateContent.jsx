@@ -247,16 +247,20 @@ const toggleChannel = (option) => {
     api.get('/plan/interest')
       .then(({ data }) => {
         const loaded = data.interests || [];
-        setInterest(loaded.length > 0 ? loaded : [
+        const fallback = [
           'Technology', 'Fashion', 'Beauty', 'Fitness', 'Food',
           'Travel', 'Gaming', 'Music', 'Art', 'Photography',
           'Sports', 'Education', 'Finance', 'Health', 'Lifestyle',
-        ]);
+          'Business', 'Entertainment', 'DIY', 'Pets', 'Parenting',
+        ];
+        const merged = [...new Set([...loaded, ...fallback])];
+        setInterest(merged);
       })
       .catch(() => setInterest([
         'Technology', 'Fashion', 'Beauty', 'Fitness', 'Food',
         'Travel', 'Gaming', 'Music', 'Art', 'Photography',
         'Sports', 'Education', 'Finance', 'Health', 'Lifestyle',
+        'Business', 'Entertainment', 'DIY', 'Pets', 'Parenting',
       ]))
       .finally(() => setLoading(false));
 
