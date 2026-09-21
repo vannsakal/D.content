@@ -66,7 +66,7 @@ def recommendation(p: PlanInput):
         raise HTTPException(status_code=500, detail=f"ML prediction failed: {e}")
 
     # 2. Gemini content generation (retries internally, then returns an empty response)
-    content = ai.generate_combined_response(
+    content = ai.generate_single_request(
         category=p.product_category,
         product=p.product_name,
         target_audience=build_target_audience(p),
